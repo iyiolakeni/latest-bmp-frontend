@@ -1,0 +1,111 @@
+<div class="flex justify-center items-center h-screen home">
+    <div class="bg-gray-800 rounded-lg shadow-lg p-8 w-full max-w-md">
+      <div class="text-center mb-6">
+        <div class="flex justify-center">
+          <img src="/assets/logo.jpg" alt="Logo" class="w-10 h-10 rounded-full object-cover">
+        </div>
+
+        <h1 class="text-2xl font-bold text-white">Get Started!</h1>
+        <p class="text-gray-400 text-sm italic mb-4">Take Control of Your POS Requests. Simplify Your Workflow.</p>
+        <p *ngIf="apiResponse !== ''" class="bg-red-400 p-2 font-bold capitalize text-white text-sm">{{apiResponse}}</p>
+      </div>
+  
+      <form [formGroup]="signUpForm" (submit)="onSubmit()">
+        <div class="flex gap-3">
+            <div class="mb-4">
+              <label for="firstname" class="block text-gray-400 font-medium mb-2">Firstname</label>
+              <input id="firstname" class="border-gray-700 text-black rounded-md px-2 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter first name" formControlName="firstName" required>
+            </div>
+            <div class="mb-4">
+              <label for="middlename" class="block text-gray-400 font-medium mb-2">Middlename</label>
+              <input id="middlename" class="border-gray-700 text-black rounded-md px-2 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your Middlename" formControlName="middleName">
+            </div>
+        </div>
+        <div class="flex gap-3">
+            <div class="mb-4">
+              <label for="lastname" class="block text-gray-400 font-medium mb-2">Last Name</label>
+              <input id="lastname" class="border-gray-700 text-black rounded-md px-2 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter last name" required formControlName="lastName">
+            </div>
+            <div class="mb-4">
+              <label for="username" class="block text-gray-400 font-medium mb-2">Username</label>
+              <input id="username" class="border-gray-700 text-black rounded-md px-2 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter username" required formControlName="username">
+            </div>
+        </div>
+        <div class="flex gap-3">
+            <div class="mb-4">
+              <label for="email" class="block text-gray-400 font-medium mb-2">Email</label>
+              <input id="email" class="border-gray-700 text-black rounded-md px-2 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter email" required formControlName="email">
+            </div>
+            <div class="mb-4">
+              <label for="position" class="block text-gray-400 font-medium mb-2">Position</label>
+              <select id="position" class="border-gray-700 rounded-md px-2 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer" placeholder="Enter username" formControlName="jobPositionId">
+                <option value="">Select Position</option>
+                <option *ngFor="let data of jobPosition" value="{{data.id}}">{{data.position}}</option>
+              </select>
+            </div>
+        </div>
+  
+        <div class="mb-6">
+            <label for="password" class="block text-gray-400 font-medium mb-2">Password</label>
+            <div class="relative">
+              <input [type]="showPassword ? 'text' : 'password'" id="password" class="border-gray-700 text-black0 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password" required formControlName="password">
+              <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-black" (click)="togglePassword()">
+                <ng-icon *ngIf="showPassword" name="bootstrapEyeFill" class="h-5 w-5"></ng-icon>
+                <ng-icon *ngIf="!showPassword" name="bootstrapEyeSlashFill" class="h-5 w-5"></ng-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <label for="confirmPassword" class="block text-gray-400 font-medium mb-2">Confirm Password</label>
+            <div class="relative">
+                <input 
+                [type]="showPassword2 ? 'text' : 'password'" 
+                id="confirmPassword" 
+                class="border-gray-700 text-black rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 
+                       focus:ring-blue-500 
+                       {{ confirmPassword ? 'border-green-500' : 'border-red-500' }}" 
+                placeholder="Confirm your password" 
+                formControlName="confirmPassword"
+                (input)="confirmPasswordValue($event)">
+              <button 
+                type="button" 
+                class="absolute inset-y-0 right-0 pr-3 flex items-center text-black" 
+                (click)="togglePassword1()">
+                <ng-icon 
+                  *ngIf="showPassword2" 
+                  name="bootstrapEyeFill" 
+                  class="h-5 w-5">
+                </ng-icon>
+                <ng-icon 
+                  *ngIf="!showPassword2" 
+                  name="bootstrapEyeSlashFill" 
+                  class="h-5 w-5">
+                </ng-icon>
+              </button>
+            </div>
+            <!-- Password match validation message -->
+            <div *ngIf="!confirmPassword && signUpForm.get('confirmPassword')?.value" class="text-red-500 text-sm mt-1">
+                Passwords do not match
+              </div>
+          </div>
+  
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer" [disabled]="signUpForm.invalid || !confirmPassword">
+            <span *ngIf="!submit"></span>
+            Login
+            <div *ngIf="submit" class="flex items-center justify-center p-4 bg-gray-100 rounded-lg shadow-md">
+                <span class="mr-2 text-lg font-semibold text-blue-600">Creating an account</span>
+                <div class="flex space-x-1">
+                  <div class="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
+                  <div class="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style="animation-delay: -0.6s;"></div>
+                  <div class="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style="animation-delay: -0.3s;"></div>
+                </div>
+              </div>
+        </button>
+      </form>
+  
+      <div class="flex justify-center mt-4">
+        <a class="text-blue-500 ">Already have an account? <span (click)="login()" class="cursor-pointer text-white hover:text-red-400">Login</span></a>
+      </div>
+    </div>
+  </div>

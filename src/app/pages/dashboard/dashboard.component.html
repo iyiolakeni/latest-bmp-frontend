@@ -1,0 +1,153 @@
+<!-- status-summary-cards.component.html -->
+<div class="w-full p-4 bg-gray-50">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div 
+        *ngFor="let card of statusCards"
+        class="
+          {{ card.bgColor }}
+          {{ card.borderColor }}
+          border-2
+          rounded-2xl 
+          shadow-md 
+          p-5 
+          transition-all 
+          duration-300 
+          hover:shadow-xl
+          hover:-translate-y-2
+          flex 
+          flex-col 
+          items-center 
+          justify-between
+          space-y-3
+        "
+      >
+        <!-- <div 
+          class="
+            {{ card.borderColor }}
+            border-2
+            rounded-full
+            p-3
+            mb-2
+            bg-white
+            shadow-sm
+          "
+        >
+          <mat-icon 
+            class="
+              {{ card.textColor }}
+              w-8 
+              h-8
+            "
+          >
+            {{ card.iconName }}
+          </mat-icon>
+        </div> -->
+        
+        <div class="text-center">
+          <h3 
+            class="
+              text-sm 
+              font-medium 
+              {{ card.textColor }}
+              uppercase 
+              tracking-wider
+            "
+          >
+            {{ card.title }}
+          </h3>
+          <p 
+            class="
+              text-3xl 
+              font-bold 
+              {{ card.textColor }}
+              mt-1
+            "
+          >
+            {{ card.count }}
+          </p>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4 py-6 space-y-6">
+    <!-- Dashboard Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Pie Chart Section -->
+      <div class="bg-white rounded-xl shadow-md p-4">
+        <canvas id="requestPieChart" class="w-full h-64"></canvas>
+      </div>
+  
+      <!-- Lifecycle Progress Pipeline -->
+      <div class="bg-white rounded-xl shadow-md p-4">
+        <h3 class="text-xl font-semibold mb-4 text-gray-700">Request Lifecycle</h3>
+        <div class="space-y-2">
+          <div 
+            *ngFor="let stage of lifecycleStages; let i = index" 
+            class="flex items-center space-x-3"
+          >
+            <div 
+              class="w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300"
+              [ngClass]="{
+                'bg-green-500 text-white': stage.isCompleted,
+                'bg-blue-500 text-white': stage.isActive,
+                'bg-gray-200 text-gray-500': !stage.isCompleted && !stage.isActive
+              }"
+            >
+              {{ i + 1 }}
+            </div>
+            <span 
+              class="text-sm transition-all duration-300"
+              [ngClass]="{
+                'font-bold text-blue-600': stage.isActive,
+                'text-green-600': stage.isCompleted,
+                'text-gray-500': !stage.isCompleted && !stage.isActive
+              }"
+            >
+              {{ stage.name }}
+            </span>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Notifications Section -->
+      <div class="bg-white rounded-xl shadow-md p-4">
+        <h3 class="text-xl font-semibold mb-4 text-gray-700">Notifications</h3>
+        <div class="space-y-3">
+          <div 
+            *ngFor="let notification of notifications" 
+            class="flex items-start space-x-3 p-3 rounded-lg shadow-sm transition-all duration-300 hover:shadow-md"
+            [ngClass]="getNotificationStyles(notification.type).bgColor"
+          >
+            <div class="text-2xl">
+              {{ getNotificationStyles(notification.type).icon }}
+            </div>
+            <div class="flex-1">
+              <h4 
+                class="font-semibold text-sm"
+                [ngClass]="getNotificationStyles(notification.type).textColor"
+              >
+                {{ notification.title }}
+              </h4>
+              <p 
+                class="text-xs"
+                [ngClass]="getNotificationStyles(notification.type).textColor"
+              >
+                {{ notification.message }}
+              </p>
+              <span class="text-xs text-gray-500 mt-1 block">
+                {{ notification.timestamp | date:'short' }}
+              </span>
+            </div>
+            <button 
+              (click)="removeNotification(notification.id)"
+              class="text-red-500 hover:text-red-700 text-sm"
+            >
+              ✖
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
