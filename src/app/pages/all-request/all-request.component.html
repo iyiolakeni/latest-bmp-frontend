@@ -1,0 +1,339 @@
+<app-loader *ngIf="loading"></app-loader>
+
+<div
+  class="container bg-gray-100 items-center py-3 min-h-screen"
+  *ngIf="!loading"
+>
+  <div class="flex flex-col md:flex-row items-center justify-between mx-6">
+    <div class="w-full md:max-w-sm pt-1 mb-4 md:mb-0">
+      <!-- SearchBox -->
+      <div class="flex items-center gap-2 relative rounded-lg">
+        <div
+          class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5 rounded-lg"
+        >
+          <ng-icon class="text-gray-400" name="bootstrapSearch"></ng-icon>
+        </div>
+        <input
+          class="py-3 bg-gray-200 ps-10 pe-4 block w-full border-gray-200 rounded-full text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+          type="text"
+          aria-expanded="false"
+          placeholder="Search"
+        />
+        <ng-icon
+          class="text-slate-600 cursor-pointer"
+          name="bootstrapSliders2Vertical"
+        ></ng-icon>
+      </div>
+    </div>
+    <div class="flex flex-col md:flex-row items-center gap-2"
+    *ngIf="user.jobPosition === 'Account Officer'"
+    >
+      <button
+      (click)="createRequest()"
+        class="bg-blue-500 rounded-full p-2 text-white hover:bg-blue-800 mb-2 md:mb-0"
+      >
+        <ng-icon class="me-1" name="bootstrapPlus"></ng-icon>
+        Create Request
+      </button>
+    </div>
+  </div>
+
+  <div class="px-7 pt-3">
+    <div class="flex items-center">
+      <span class="text-2xl font-bold text-gray-800">All Requests</span>
+    </div>
+    <div class="flex items-center mb-4">
+      <span
+        class="mr-4 text-lg font-medium bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent"
+      >
+        Track and manage all requests in one place.
+      </span>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <!-- Breadcrumbs -->
+      <ol class="flex items-center whitespace-nowra mt-5">
+        <li class="inline-flex items-center">
+          <a
+            class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600"
+            href="/dashboard"
+          >
+            <ng-icon class="mr-2" name="bootstrapHouseDoor"></ng-icon>
+            Home
+          </a>
+          <ng-icon
+            class="opacity-50 mx-2"
+            name="bootstrapChevronRight"
+          ></ng-icon>
+        </li>
+        <li class="inline-flex items-center">
+          <a
+            class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600"
+            href="/all-request"
+          >
+            <ng-icon class="mr-2" name="bootstrapFileEarmarkText"></ng-icon>
+            All Requests
+          </a>
+        </li>
+      </ol>
+
+      <div class="flex items-center gap-3">
+        <span class="text-gray-400 cursor-pointer">
+          <ng-icon name="bootstrapSortUp"></ng-icon>
+          Sort
+        </span>
+        <span class="text-gray-400 cursor-pointer">
+          <ng-icon name="bootstrapFunnel"> </ng-icon>
+          Filter</span
+        >
+        <span class="text-gray-400 cursor-pointer">
+          <ng-icon name="bootstrapDownload"></ng-icon>
+          Export
+        </span>
+      </div>
+    </div>
+
+    <!-- request-data-table.component.html -->
+    <div class="w-full max-w-full mx-auto p-4">
+      <!-- Error Message -->
+      <div
+        *ngIf="error"
+        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+        role="alert"
+      >
+        <span class="block sm:inline">{{ error }} 
+            <a href="/all-request" class="href">Try Again</a>
+        </span>
+      </div>
+
+      <div
+        *ngIf="!loading && !error"
+        class="overflow-x-auto shadow-md rounded-lg"
+      >
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+          <thead
+            class="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0 z-10"
+          >
+            <tr>
+              <th
+                scope="col"
+                class="px-6 py-3 cursor-pointer hover:bg-gray-100"
+              >
+                <div class="flex items-center">
+                  RequestId
+                  <!-- <span *ngIf="sortColumn === 'requestId'" class="ml-1">
+                    {{ sortDirection === "asc" ? "▲" : "▼" }}
+                  </span> -->
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 cursor-pointer hover:bg-gray-100"
+              >
+                <div class="flex items-center">
+                  No of POS
+                  <!-- <span *ngIf="sortColumn === 'noOfPos'" class="ml-1">
+                    {{ sortDirection === "asc" ? "▲" : "▼" }}
+                  </span> -->
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 cursor-pointer hover:bg-gray-100"
+              >
+                <div class="flex items-center">
+                  Merchant Name
+                  <!-- <span *ngIf="sortColumn === 'merchantName'" class="ml-1">
+                    {{ sortDirection === "asc" ? "▲" : "▼" }}
+                  </span> -->
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 cursor-pointer hover:bg-gray-100"
+              >
+                <div class="flex items-center">
+                  Contact Person
+                  <!-- <span *ngIf="sortColumn === 'contactPerson'" class="ml-1">
+                    {{ sortDirection === "asc" ? "▲" : "▼" }}
+                  </span> -->
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 cursor-pointer hover:bg-gray-100"
+              >
+                <div class="flex items-center">
+                  Contact Number
+                  <!-- <span *ngIf="sortColumn === 'contactNumber'" class="ml-1">
+                    {{ sortDirection === "asc" ? "▲" : "▼" }}
+                  </span> -->
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 cursor-pointer hover:bg-gray-100"
+              >
+              <div class="flex items-center">
+                  Date Submitted
+                  <!-- <span *ngIf="sortColumn === 'createdAt'" class="ml-1">
+                    {{ sortDirection === "asc" ? "▲" : "▼" }}
+                  </span> -->
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 cursor-pointer hover:bg-gray-100"
+              >
+                <div class="flex items-center">
+                  Status
+                  <!-- <span *ngIf="sortColumn === 'status'" class="ml-1">
+                    {{ sortDirection === "asc" ? "▲" : "▼" }}
+                  </span> -->
+                </div>
+              </th>
+              <th scope="col" class="px-6 py-3">Actions</th>
+            </tr>
+          </thead>
+          <!-- Table Body -->
+          <tbody>
+            <tr
+              *ngFor="let request of allRequests"
+              class="bg-white border-b hover:bg-gray-50 transition-colors duration-200"
+            >
+              <td class="px-6 py-4" *ngIf="user.jobPosition === 'Account Officer'; else requestId">{{ request.requestId }}</td>
+              <ng-template #requestId>
+                <td class="px-6 py-4">{{request.requestID}}</td>
+                </ng-template>
+              <td class="px-6 py-4">{{ request.noOfPos }}</td>
+              <td class="px-6 py-4">{{ request.merchantName }}</td>
+              <td class="px-6 py-4">{{ request.contactPerson }}</td>
+              <td class="px-6 py-4">{{ request.contactNumber }}</td>
+              <td class="px-6 py-4">{{ getFormattedDate(request.createdAt) }}</td>
+              <td class="px-6 py-4 capitalize"
+              [ngClass]="getStatusClass(request.status)"
+              >
+                  <span class="px-2 py-1 rounded-full text-xs font-medium">
+                  {{ request.status }}
+                </span>
+              </td>
+              <td class="px-6 py-4 flex space-x-2">
+                <!-- View Details -->
+                <button
+                (click)="viewRequest(request)"
+                  class="text-blue-600 hover:text-blue-900 transition-colors"
+                  title="View Details"
+                >
+                  <ng-icon name="bootstrapEye"></ng-icon>
+                </button>
+
+                <button
+                (click)="editRequest(request)"
+                  *ngIf="request.status === 'pending' && user.jobPosition === 'Account Officer'"
+                  class="text-green-600 hover:text-green-900 transition-colors"
+                  title="Edit Request"
+                >
+                  <ng-icon name="bootstrapPencilSquare"></ng-icon>
+                </button>
+                <button *ngIf="request.status === 'pending' && user.jobPosition === 'Business Developer'"
+                  class="text-green-600 hover:text-green-900 transition-colors"
+                  title="Approve Request"
+                >
+                  <ng-icon name="bootstrapCheckCircle"></ng-icon>
+                </button>
+                <button *ngIf="request.status === 'pending' && user.jobPosition === 'Business Developer'"
+                  class="text-red-600 hover:text-red-900 transition-colors"
+                  title="Disapprove Request"
+                  (click)="openModal(request)"
+                >
+                  <ng-icon name="bootstrapXCircle"></ng-icon>
+                </button>
+
+                <button
+                  *ngIf="request.status === 'pending' && user.jobPosition === 'Account Officer'"
+                  class="text-red-600 hover:text-red-900 transition-colors"
+                  title="Cancel Request"
+                >
+                  <ng-icon name="bootstrapTrash"></ng-icon>
+                </button>
+              </td>
+            </tr>
+
+            <!-- Empty state -->
+            <tr *ngIf="allRequests.total === 0">
+              <td colspan="5" class="text-center py-4 text-gray-500">
+                No requests found.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="flex justify-between items-center p-4 bg-gray-50">
+          <span class="text-sm text-gray-700">
+            Showing
+            {{ (currentPage - 1) * itemsPerPage + 1 }}
+            to
+            {{ getMinValue(currentPage * itemsPerPage, totalItems) }}
+            of
+            {{ totalItems }} entries
+          </span>
+          <div class="flex space-x-2">
+            <button
+              (click)="previousPage()"
+              [disabled]="currentPage === 1"
+              class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <button
+              (click)="nextPage()"
+              [disabled]="currentPage * itemsPerPage >= totalItems"
+              class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A confirm dialog using tailwind to confirm rejection or deletion -->
+ 
+<div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="false" *ngIf="showDialog">
+  <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"></div>
+
+  <form [formGroup]="rejectForm" (submit)="disapproveRequest()">
+  <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+      <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+        <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10">
+              <svg class="size-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+              </svg>
+            </div>
+            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+              <h3 class="text-base font-semibold text-gray-900" id="modal-title">Reject Request</h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-900">Are you sure you want to reject this request? This action cannot be undone. Enter the reason for rejection below.</p>
+                  <textarea class="p-2 mt-2 w-full border border-gray-300 rounded-lg bg-white text-gray-900" placeholder="Reason for rejection" formControlName="notes"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+          <button type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto" type="submit"
+          >Reject</button>
+          <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+          (click)="closeModal()"
+          >Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>

@@ -1,0 +1,24 @@
+<div *ngIf="show" style="left: 55%" class="fixed bottom-4 transform -translate-x-1/2 z-50 bg-gray-800 text-white px-6 py-4 rounded-md shadow-lg">
+    <div class="flex items-center">
+      <div class="mr-4">
+        <!-- Icon or status indicator -->
+         <ng-icon *ngIf="message === 'success'" name="bootstrapCheckCircle" class="text-green-600"></ng-icon>
+         <ng-icon *ngIf="message === 'error'" name="bootstrapExclamationCircle" class="text-red-600"></ng-icon>
+         <ng-icon *ngIf="message === 'warning'" name="bootstrapInfoCircle" class="text-yellow-400"></ng-icon>
+      </div>
+      <div class="flex-1">
+        <p class="font-medium" *ngIf="message === 'success'">Congratulations</p>
+        <p *ngIf="message === 'success'" class="text-sm text-gray-400">Your request has been submitted successfully.</p>
+        <p class="font-medium" *ngIf="message === 'error'">{{apiResponse}}</p>
+        <p *ngIf="message === 'warning'" class="text-sm text-gray-400">{{apiResponse}}</p>
+      </div>
+      <!-- <button class="text-gray-400 hover:text-gray-300 focus:outline-none"
+      (click)="show = false"
+      >
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button> -->
+    </div>
+  </div>

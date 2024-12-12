@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { catchError, Observable } from 'rxjs';
@@ -20,8 +20,24 @@ export class RequestsService {
     )
   }
 
-  getAll(): Observable<any>{
-    return this.http.get(`${REQUESTS}/get-all`).pipe(
+  update(id: string, request : any): Observable<any>{
+    return this.http.patch<any>(`${REQUESTS}/update/${id}`, request).pipe(
+      catchError(this.errorHanlder.errorHandler)
+    )
+  }
+
+  getAll(
+    page: number = 1,
+    limit: number = 10,
+    sortBy: string = 'createdAt',
+    sortDirection: string = 'desc'
+  ): Observable<any>{
+    let params = new HttpParams()
+    .set('page', page)
+    .set('limit', limit)
+    .set('sortBy', sortBy)
+    .set('sortDirection', sortDirection);
+    return this.http.get(`${REQUESTS}/get-all`, {params}).pipe(
       catchError(this.errorHanlder.errorHandler)
     )
   }
@@ -43,6 +59,7 @@ export class RequestsService {
       catchError(this.errorHanlder.errorHandler)
     )
   }
+
   getApprovedRequest(userId: string): Observable<any>{
     return  this.http.get(`${REQUESTS}/get-approved-request-by-user/${userId}`).pipe(
       catchError(this.errorHanlder.errorHandler)
@@ -60,6 +77,12 @@ export class RequestsService {
   }
   getDeliveredRequests(userId: string): Observable<any>{
     return  this.http.get(`${REQUESTS}/get-delivered-request-by-user/${userId}`).pipe(
+      catchError(this.errorHanlder.errorHandler)
+    )
+  }
+
+  getProcessingTime(): Observable<any>{
+    return this.http.get(`${REQUESTS}/average-processing-time`).pipe(
       catchError(this.errorHanlder.errorHandler)
     )
   }

@@ -1,8 +1,11 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { RequestsService } from '../../services/requests/requests.service';
 import { SharedServiceService } from '../../services/shared-service/shared-service.service';
-import { UserResponse } from '../../interface/books.model';
-import {Chart, registerables} from 'chart.js';
+import { ApiResponse, UserResponse } from '../../interface/books.model';
+import {Chart, ChartConfiguration, ChartType, registerables} from 'chart.js';
+import { finalize, forkJoin, Observable, Subscription } from 'rxjs';
+import { DatePipe } from '@angular/common';
+import { ApproveRequestService } from '../../services/approve-request/approve-request.service';
 
 interface StatusCard {
   title: string;
@@ -18,12 +21,7 @@ interface RequestStatus {
   status: string;
   count: number;
   color: string;
-}
-
-interface LifecycleStage {
-  name: string;
-  isActive: boolean;
-  isCompleted: boolean;
+  description?: string;
 }
 
 interface Notification {
@@ -40,6 +38,7 @@ interface Notification {
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
+  @ViewChild('chartCanvas', {static: false}) chartCanvas?: ElementRef<HTMLCanvasElement>
   
   pendingCount: number = 0;
   approvedCount: number = 0;
@@ -47,22 +46,70 @@ export class DashboardComponent {
   deployedCount: number = 0;
   deliveredCount: number = 0;
   user!: UserResponse;
+  loading: boolean = false;
+  dateToday: string | null = new DatePipe('en-US').transform(new Date(), 'EEE, MMM d');
+  processingTime: number = 0;
+  private subscriptions: Subscription[] = [] ;
   
   statusCards: StatusCard[] = []
 
-  // Pie Chart Data
-    requestStatuses: RequestStatus[] = [
-        ];
-  
-    // Lifecycle Stages
-    lifecycleStages: LifecycleStage[] = [
-      { name: 'Submitted', isActive: false, isCompleted: true },
-      { name: 'Review', isActive: false, isCompleted: true },
-      { name: 'Approval', isActive: true, isCompleted: false },
-      { name: 'Development', isActive: false, isCompleted: false },
-      { name: 'Deployment', isActive: false, isCompleted: false },
-      { name: 'Delivered', isActive: false, isCompleted: false }
-    ];
+  // Donought Chart Data
+    requestStatuses: RequestStatus[] = [];
+    selectedRequestStatus: RequestStatus | null = null;
+    private chartInstance: Chart | null = null;
+
+    public donutChartType: ChartType = 'doughnut';
+    public donutChartOptions: ChartConfiguration['options'] = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            usePointStyle: true,
+          }
+        },
+        title: {
+          display: true,
+          text: 'Request Distribution',
+        },
+        tooltip:{
+          callbacks: {
+            label: (context: { label?: string; parsed: number; dataset: { data: unknown[] } }) => {
+              const label = context.label || '';
+              const value = context.parsed || 0;
+              
+              // Safely calculate total
+              const total = context.dataset.data.reduce((acc: number, curr: unknown) => {
+                const numValue = typeof curr === 'number' ? curr : 0;
+                return acc + numValue;
+              }, 0);
+            
+              const percentage = total > 0 
+                ? ((value / total) * 100).toFixed(1)
+                : '0';
+            
+              return `${label}: ${value} (${percentage}%)`;
+            }
+          }
+        }
+      },
+      onClick: (event, elements) => {
+        if (elements.length > 0){
+          const index = elements[0].index;
+          this.selectRequestStatus(this.requestStatuses[index]);
+        }
+      }
+    }
+
+    public donutChartData: ChartConfiguration['data'] = {
+      datasets: [{
+        data: [],
+        backgroundColor: [],
+        hoverBackgroundColor: []
+      }],
+      labels: []
+    }
   
     // Notifications
     notifications: Notification[] = [
@@ -93,6 +140,7 @@ export class DashboardComponent {
   constructor(
     private requestService: RequestsService,
     private sharedService: SharedServiceService,
+    private approvalService: ApproveRequestService,
     private cdr: ChangeDetectorRef
   ){
     Chart.register(...registerables);
@@ -101,90 +149,174 @@ export class DashboardComponent {
   ngOnInit():void{
     this.user = this.sharedService.getUser();
     this.loadExtraData();
-    setTimeout(() => {
-      this.updateRequestCards();
-      this.updateStausCards();
-      this.createPieChart();
-    }, 5000)
+    
   }
 
-  // getAllRequests(): void{
-  //   this.requestService.getRequestsByUser(this.user.id).subscribe(
-  //   (data) => {
-      
-  //   }
-  //   )
-  // }
+  ngAfterViewInit(): void {
+    // Use microtask to ensure view is fully initialized
+    Promise.resolve().then(() => {
+      this.initializeChart();
+    });
+  }
 
-  getPendingRequests(): void{
-    this.requestService.getPendingRequests(this.user.id).subscribe(
-      (data) => {
-        this.pendingCount = data.data.data.length; 
-  })
-}
+  ngOnDestroy(): void {
+    // Ensure chart is destroyed when component is destroyed
+    this.destroyChart();
+  }
 
-getApprovedRequests(): void{
-  this.requestService.getApprovedRequest(this.user.id).subscribe(
-    (data) => {
-      this.approvedCount = data.data.data.length; 
-  })
-}
+  private initializeChart(): void {
+    this.destroyChart();
 
-getRejectedRequests(): void{
-  this.requestService.getRejectedRequests(this.user.id).subscribe(
-    (data) => {
-      this.rejectedCount = data.data.data.length; 
-  })
-}
+    if(!this.loading){
+      if (!this.chartCanvas) {
+        console.error('Chart canvas is not available');
+        return;
+      }
+    }
 
-getDeployedRequests(): void{
-  this.requestService.getDeployedRequests(this.user.id).subscribe(
-    (data) => {
-      this.deployedCount = data.data.data.length; 
-  })
-}
+    const ctx = this.chartCanvas?.nativeElement.getContext('2d');
 
-getDeliveredRequests(): void{
-  this.requestService.getDeliveredRequests(this.user.id).subscribe(
-    (data) => {
-      this.deliveredCount = data.data.data.length; 
-  })
-}
+    if (ctx) {
+      // Create new chart
+      this.chartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: this.getChartData(),
+        options: this.donutChartOptions
+      });
+    } else {
+      // console.error('Failed to get 2D context');
+      return;
+    }
+  }
 
-loadExtraData(): void{
-  this.getApprovedRequests();
-  this.getRejectedRequests();
-  this.getDeployedRequests();
-  this.getDeliveredRequests();
-  this.getPendingRequests();
-}
+  private destroyChart(): void {
+    if (this.chartInstance) {
+      this.chartInstance.destroy();
+      this.chartInstance = null;
+    }
+  }
 
-createPieChart(): void {
-  const ctx = document.getElementById('requestPieChart') as HTMLCanvasElement;
-  new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: this.requestStatuses.map(status => status.status),
+  loadExtraData(): void {
+    this.loading = true;
+    this.trackRequests();
+  
+    let observables: { [key: string]: Observable<any> } = {};
+  
+    if (this.user.jobPosition === 'Account Officer') {
+      observables = {
+        pending: this.requestService.getPendingRequests(this.user.id),
+        approved: this.requestService.getApprovedRequest(this.user.id),
+        rejected: this.requestService.getRejectedRequests(this.user.id),
+        deployed: this.requestService.getDeployedRequests(this.user.id),
+        delivered: this.requestService.getDeliveredRequests(this.user.id)
+      };
+    } else if (this.user.jobPosition === 'Business Developer') {
+      observables = {
+        pending: this.approvalService.getPendinRequest(),
+        approved: this.approvalService.getApprovedRequest(),
+        rejected: this.approvalService.getRejectedRequest()
+      };
+    } else {
+      observables = {
+        deployed: this.requestService.getDeployedRequests(this.user.id),
+        delivered: this.requestService.getDeliveredRequests(this.user.id)
+      };
+    }
+  
+    forkJoin(observables).pipe(
+      finalize(() => {
+        this.updateRequestCards();
+        this.updateStausCards();
+        this.loading = false;
+        this.cdr.detectChanges();
+        this.updateDonutChart();
+      })
+    ).subscribe({
+      next: (results: any) => {
+        this.pendingCount = results.pending?.data.data.length || 0;
+        this.approvedCount = results.approved?.data.data.length || 0;
+        this.rejectedCount = results.rejected?.data.data.length || 0;
+        this.deployedCount = results.deployed?.data.data.length || 0;
+        this.deliveredCount = results.delivered?.data.data.length || 0;
+      },
+      error: (error: any) => {
+        console.error('Error loading dashboard data', error);
+        this.loading = false;
+      }
+    });
+  }
+
+  updateRequestCards(): void {
+    this.requestStatuses = [
+      { 
+        status: 'Pending', 
+        count: this.pendingCount, 
+        color: '#FFC107',
+        description: 'Requests awaiting initial review and processing'
+      },
+      { 
+        status: 'Approved', 
+        count: this.approvedCount, 
+        color: '#4CAF50',
+        description: 'Requests that have been reviewed and approved'
+      },
+      { 
+        status: 'Rejected', 
+        count: this.rejectedCount, 
+        color: '#F44336',
+        description: 'Requests that did not meet the required criteria'
+      },
+      { 
+        status: 'Deployed', 
+        count: this.deployedCount, 
+        color: '#2196F3',
+        description: 'Requests that have been implemented and are in production'
+      },
+      { 
+        status: 'Delivered', 
+        count: this.deliveredCount, 
+        color: '#9C27B0',
+        description: 'Finalized requests that have been completed and delivered'
+      }
+    ];
+  }
+
+  updateDonutChart(): void {
+    if (this.chartInstance) {
+      this.chartInstance.data = this.getChartData();
+      this.chartInstance.update();
+    } else {
+      this.initializeChart();
+    }
+  }
+
+  getChartData(): ChartConfiguration['data'] {
+    return {
       datasets: [{
         data: this.requestStatuses.map(status => status.count),
         backgroundColor: this.requestStatuses.map(status => status.color),
-        hoverOffset: 4
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'bottom'
-        },
-        title: {
-          display: true,
-          text: 'Request Distribution'
-        }
-      }
-    }
-  });
-}
+        hoverBackgroundColor: this.requestStatuses.map(status => this.darkenColor(status.color, 0.2))
+      }],
+      labels: this.requestStatuses.map(status => status.status)
+    };
+  }
+
+  // Utility method to darken colors for hover effect
+  darkenColor(color: string, percent: number): string {
+    const num = parseInt(color.slice(1), 16);
+    const amt = Math.round(2.55 * percent);
+    const R = Math.max(0, Math.min(255, (num >> 16) - amt));
+    const B = Math.max(0, Math.min(255, ((num >> 8) & 0x00FF) - amt));
+    const G = Math.max(0, Math.min(255, (num & 0x0000FF) - amt));
+    return `#${(0x1000000 + R * 0x10000 + B * 0x100 + G).toString(16).slice(1)}`;
+  }
+
+
+  // Method to handle status selection
+  selectRequestStatus(status: RequestStatus): void {
+    this.selectedRequestStatus = status;
+  }
+  
 
 // Method to remove notification
 removeNotification(id: number): void {
@@ -223,6 +355,7 @@ getNotificationStyles(type: string): { icon: string, bgColor: string, textColor:
 
 
 updateStausCards():void{
+  if (this.user.jobPosition === 'Account Officer') {
   this.statusCards = [
     { 
       title: 'Pending', 
@@ -270,16 +403,63 @@ updateStausCards():void{
       trend: '+15%'
     }
   ]
+}else if (this.user.jobPosition === 'Business Developer') {
+  this.statusCards = [
+    { 
+      title: 'Pending', 
+      count: this.pendingCount, 
+      iconName: 'trending_up',
+      bgColor: 'bg-amber-50', 
+      borderColor: 'border-amber-300', 
+      textColor: 'text-amber-600',
+      trend: '+12%'
+    },
+    { 
+      title: 'Approved', 
+      count: this.approvedCount, 
+      iconName: 'check_circle',
+      bgColor: 'bg-emerald-50', 
+      borderColor: 'border-emerald-300', 
+      textColor: 'text-emerald-600',
+      trend: '+8%'
+    },
+    { 
+      title: 'Rejected', 
+      count: this.rejectedCount, 
+      iconName: 'cancel',
+      bgColor: 'bg-rose-50', 
+      borderColor: 'border-rose-300', 
+      textColor: 'text-rose-600',
+      trend: '-3%'
+    }
+  ]
+}
 }
 
-updateRequestCards(): void {
-  this.requestStatuses = [
-    { status: 'Pending', count: this.pendingCount, color: '#FFC107' },
-    { status: 'Approved', count: this.approvedCount, color: '#4CAF50' },
-    { status: 'Rejected', count: this.rejectedCount, color: '#F44336' },
-    { status: 'Deployed', count: this.deployedCount, color: '#2196F3' },
-    { status: 'Delivered', count: this.deliveredCount, color: '#9C27B0' }
-  ];
+createNewRequest() {
+  // Implement navigation or modal for creating a new request
+  console.log('Create New Request');
 }
+
+viewApprovals() {
+  // Implement navigation to approvals view
+  console.log('View Approvals');
+}
+
+generateReport() {
+  console.log('Generate Report');
+}
+
+trackRequests() {
+  this.subscriptions.push(
+    this.requestService.getProcessingTime().subscribe(
+      (data: ApiResponse<number>) => {
+        this.processingTime = data.data.data
+        console.log('Response ', this.processingTime)
+      }
+    )
+  )
+}
+
 }
 

@@ -1,117 +1,264 @@
-<!-- status-summary-cards.component.html -->
-<div class="w-full p-4 bg-gray-50">
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-      <div 
-        *ngFor="let card of statusCards"
-        class="
-          {{ card.bgColor }}
-          {{ card.borderColor }}
-          border-2
-          rounded-2xl 
-          shadow-md 
-          p-5 
-          transition-all 
-          duration-300 
-          hover:shadow-xl
-          hover:-translate-y-2
-          flex 
-          flex-col 
-          items-center 
-          justify-between
-          space-y-3
-        "
+
+<app-loader *ngIf="loading"></app-loader>
+<div class="container bg-gray-100 rounded-3xl items-center my-3" *ngIf="!loading">
+
+  <div class="px-4 md:px-7 pt-3">
+    <p class="font-semibold pb-4">{{dateToday}}</p>
+    <div class="flex items-center">
+      <span class="text-xl md:text-2xl font-bold text-gray-800">Hello, {{user.firstName}}</span>
+    </div>
+    <div class="flex items-center mb-4">
+      <span class="mr-4 text-base md:text-lg font-medium bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+        Welcome to Your Request Hub – Streamline, Track, Deliver!
+      </span>
+    </div>
+  </div>
+
+  <div class="w-full p-4">
+    <div class="grid gap-4">
+      <div
+        *ngIf="statusCards.length < 2"
+        class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1"
       >
-        <!-- <div 
+        <div
+          *ngFor="let card of statusCards"
           class="
+            {{ card.bgColor }}
             {{ card.borderColor }}
             border-2
-            rounded-full
-            p-3
-            mb-2
-            bg-white
-            shadow-sm
+            rounded-2xl
+            shadow-md
+            p-5
+            transition-all
+            duration-300
+            hover:shadow-xl
+            hover:-translate-y-2
+            flex
+            flex-col
+            items-center
+            justify-between
+            space-y-3
+            cursor-pointer
           "
         >
-          <mat-icon 
-            class="
-              {{ card.textColor }}
-              w-8 
-              h-8
-            "
-          >
-            {{ card.iconName }}
-          </mat-icon>
-        </div> -->
-        
-        <div class="text-center">
-          <h3 
-            class="
-              text-sm 
-              font-medium 
-              {{ card.textColor }}
-              uppercase 
-              tracking-wider
-            "
-          >
-            {{ card.title }}
-          </h3>
-          <p 
-            class="
-              text-3xl 
-              font-bold 
-              {{ card.textColor }}
-              mt-1
-            "
-          >
-            {{ card.count }}
-          </p>
+          <div class="text-center">
+            <h3
+              class="
+                text-sm
+                font-medium
+                {{ card.textColor }}
+                uppercase
+                tracking-wider
+              "
+            >
+              {{ card.title }}
+            </h3>
+            <p
+              class="
+                text-2xl md:text-3xl
+                font-bold
+                {{ card.textColor }}
+                mt-1
+              "
+            >
+              {{ card.count }}
+            </p>
+          </div>
         </div>
-        
+      </div>
+  
+      <div
+        *ngIf="statusCards.length > 2 && statusCards.length <= 5"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4"
+      >
+        <div
+          *ngFor="let card of statusCards"
+          class="
+            {{ card.bgColor }}
+            {{ card.borderColor }}
+            border-2
+            rounded-2xl
+            shadow-md
+            p-5
+            transition-all
+            duration-300
+            hover:shadow-xl
+            hover:-translate-y-2
+            flex
+            flex-col
+            items-center
+            justify-between
+            space-y-3
+            cursor-pointer
+          "
+        >
+          <div class="text-center">
+            <h3
+              class="
+                text-sm
+                font-medium
+                {{ card.textColor }}
+                uppercase
+                tracking-wider
+              "
+            >
+              {{ card.title }}
+            </h3>
+            <p
+              class="
+                text-2xl md:text-3xl
+                font-bold
+                {{ card.textColor }}
+                mt-1
+              "
+            >
+              {{ card.count }}
+            </p>
+          </div>
+        </div>
+      </div>
+  
+      <div
+        *ngIf="statusCards.length > 5"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
+      >
+        <div
+          *ngFor="let card of statusCards"
+          class="
+            {{ card.bgColor }}
+            {{ card.borderColor }}
+            border-2
+            rounded-2xl
+            shadow-md
+            p-5
+            transition-all
+            duration-300
+            hover:shadow-xl
+            hover:-translate-y-2
+            flex
+            flex-col
+            items-center
+            justify-between
+            space-y-3
+            cursor-pointer
+          "
+        >
+          <div class="text-center">
+            <h3
+              class="
+                text-sm
+                font-medium
+                {{ card.textColor }}
+                uppercase
+                tracking-wider
+              "
+            >
+              {{ card.title }}
+            </h3>
+            <p
+              class="
+                text-2xl md:text-3xl
+                font-bold
+                {{ card.textColor }}
+                mt-1
+              "
+            >
+              {{ card.count }}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="container mx-auto px-4 py-6 space-y-6">
-    <!-- Dashboard Grid -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- Pie Chart Section -->
       <div class="bg-white rounded-xl shadow-md p-4">
-        <canvas id="requestPieChart" class="w-full h-64"></canvas>
-      </div>
-  
-      <!-- Lifecycle Progress Pipeline -->
-      <div class="bg-white rounded-xl shadow-md p-4">
-        <h3 class="text-xl font-semibold mb-4 text-gray-700">Request Lifecycle</h3>
-        <div class="space-y-2">
-          <div 
-            *ngFor="let stage of lifecycleStages; let i = index" 
-            class="flex items-center space-x-3"
-          >
-            <div 
-              class="w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300"
-              [ngClass]="{
-                'bg-green-500 text-white': stage.isCompleted,
-                'bg-blue-500 text-white': stage.isActive,
-                'bg-gray-200 text-gray-500': !stage.isCompleted && !stage.isActive
-              }"
-            >
-              {{ i + 1 }}
-            </div>
-            <span 
-              class="text-sm transition-all duration-300"
-              [ngClass]="{
-                'font-bold text-blue-600': stage.isActive,
-                'text-green-600': stage.isCompleted,
-                'text-gray-500': !stage.isCompleted && !stage.isActive
-              }"
-            >
-              {{ stage.name }}
-            </span>
+        <div class="h-64 relative">
+          <canvas #chartCanvas class="w-full h-full cursor-pointer"></canvas>
+        </div>
+        
+        <div *ngIf="selectedRequestStatus" class="mt-4 p-3 bg-gray-50 rounded-md">
+          <h3 class="font-semibold text-lg mb-2">{{ selectedRequestStatus.status }} Requests</h3>
+          <p class="text-gray-600">{{ selectedRequestStatus.description }}</p>
+          <div class="flex items-center mt-2">
+            <span class="font-bold mr-2">Total Count:</span>
+            <span class="text-primary">{{ selectedRequestStatus.count }}</span>
           </div>
         </div>
       </div>
-  
-      <!-- Notifications Section -->
+
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <div class="grid grid-cols-1 gap-6">
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">Quick Actions</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <button 
+                (click)="createNewRequest()"
+                class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                <span>New Request</span>
+              </button>
+              <button 
+                (click)="viewApprovals()"
+                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center space-x-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+                <span>Approvals</span>
+              </button>
+              <button 
+                (click)="generateReport()"
+                class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center space-x-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3a1 1 0 102 0V8zm-3 3a1 1 0 100 2h3a1 1 0 100-2H8z" clip-rule="evenodd" />
+                </svg>
+                <span>Reports</span>
+              </button>
+              <button 
+                (click)="trackRequests()"
+                class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center justify-center space-x-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                  <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
+                </svg>
+                <span>Track</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">Request Metrics</h3>
+            <div class="bg-gray-100 rounded-lg p-4">
+              <div class="grid grid-cols-2 gap-4">
+                <div class="text-center">
+                  <p class="text-sm text-gray-600">Avg. Processing Time</p>
+                  <p class="text-2xl font-bold text-blue-600">{{processingTime}} days</p>
+                </div>
+                <div class="text-center">
+                  <p class="text-sm text-gray-600">Total Requests</p>
+                  <p class="text-2xl font-bold text-green-600">{{pendingCount + deliveredCount + approvedCount + deployedCount + rejectedCount}}</p>
+                </div>
+                <div class="text-center">
+                  <p class="text-sm text-gray-600">Pending</p>
+                  <p class="text-2xl font-bold text-orange-600">{{pendingCount}}</p>
+                </div>
+                <div class="text-center">
+                  <p class="text-sm text-gray-600">Completed</p>
+                  <p class="text-2xl font-bold text-purple-600">{{pendingCount + deliveredCount + approvedCount + deployedCount}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="bg-white rounded-xl shadow-md p-4">
         <h3 class="text-xl font-semibold mb-4 text-gray-700">Notifications</h3>
         <div class="space-y-3">
@@ -151,3 +298,4 @@
       </div>
     </div>
   </div>
+</div>

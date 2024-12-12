@@ -16,6 +16,7 @@ export class LoginComponent {
   showPassword: boolean = false;
   loginForm: FormGroup = new FormGroup({});
   private subscriptions: Subscription[] = [];
+  submit: boolean = false;
 
   constructor(
     private router: Router,
@@ -38,14 +39,15 @@ export class LoginComponent {
   }
 
   login(): void{
+    this.submit = true;
     if(this.loginForm.valid){
       this.subscriptions.push(
         this.loginService.login(this.loginForm.value).subscribe(
           (response: UserData) => {
-            console.log(response);
             if(response.message === 'success'){
               this.sharedService.setUser(response.user);
               this.router.navigate(['dashboard']);
+              this.submit = false;
             }
           }
         )

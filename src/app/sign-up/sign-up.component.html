@@ -91,9 +91,10 @@
           </div>
   
         <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer" [disabled]="signUpForm.invalid || !confirmPassword">
-            <span *ngIf="!submit"></span>
-            Login
-            <div *ngIf="submit" class="flex items-center justify-center p-4 bg-gray-100 rounded-lg shadow-md">
+            <span *ngIf="!submit">
+              Sign Up
+            </span>
+            <div *ngIf="submit" class="flex items-center justify-center bg-gray-100 rounded-lg shadow-md">
                 <span class="mr-2 text-lg font-semibold text-blue-600">Creating an account</span>
                 <div class="flex space-x-1">
                   <div class="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>

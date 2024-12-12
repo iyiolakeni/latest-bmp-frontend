@@ -39,19 +39,22 @@ export interface UserResponse{
     lastName: string,
     username: string,
     jobPositionId: string
-    jobPositionName: string
+    jobPosition: string
     isActive: boolean;
     created_at: Date;
     updated_at: Date;
 }
 
 export interface ApiResponse<T> {
-    data: {
-      responseCode: string;
-      message: string;
-      data: T;
-      success?: boolean;
-    };
+  data: {
+    responseCode: string;
+    message: string;
+    data: T;
+    success?: boolean;
+    total?: number;
+    page?: number;
+    limit?: number;
+  };
   }
   
   export interface UserApiResponse{

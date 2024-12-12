@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class SidebarComponent {
   isOpen = true;
   @Output() size= new EventEmitter< string>();
+  expandedItems: { [key: string]: boolean } = {};
 
   constructor(
     private router: Router
@@ -22,10 +23,42 @@ export class SidebarComponent {
       route: '/'
     },
     {
-      icon: 'book',
-      text: 'Books',
-      route: '/books'
+      icon: 'request',
+      text: 'Request',
+      route: '/all-request',
+      // caret: 'caret',
+      // children:[{
+      //   icon: 'pending',
+      //   text: 'Pending',
+      //   route: '/pending-request'
+      // },
+      // {
+      //   icon: 'approved',
+      //   text: 'Approved',
+      //   route: '/approved-request'
+      // },
+      // {
+      //   icon: 'rejected',
+      //   text: 'Rejected',
+      //   route: '/rejected-request'
+      // },
+      // {
+      //   icon: 'delivered',
+      //   text: 'Delivered',
+      //   route: '/delivered-request'
+      // },
+      // {
+      //   icon: 'deployed',
+      //   text: 'Deployed',
+      //   route: '/deployed-request'
+      // }
+    // ]
     },
+    {
+      icon: 'logout',
+      text: 'Logout',
+      route: '/'
+    }
   ]
 
   toggleSidebar(){
@@ -34,6 +67,12 @@ export class SidebarComponent {
       this.size.emit('w-64');
     }else{
       this.size.emit('w-16');
+    }
+  }
+
+  toggleSubmenu(item: SidebarItem) {
+    if (item.text) {
+      this.expandedItems[item.text] = !this.expandedItems[item.text];
     }
   }
 
