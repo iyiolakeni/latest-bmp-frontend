@@ -39,6 +39,7 @@ sortDirection: 'asc' | 'desc' = 'desc';
 sortBy: 'createdAt' | 'updatedAt ' | 'requestDate' = 'createdAt';
 private subscriptions: Subscription[] = [];
 showDialog: boolean = false;
+accept: boolean = false;
 
 private destroy$ = new Subject<void>();
 
@@ -53,7 +54,8 @@ constructor(
   private fb: FormBuilder
 ){
   this.rejectForm = this.fb.group({
-    notes: ['', Validators.required]
+    notes: [''],
+    approvedNoOfPos: ['']
   })
 }
 
@@ -100,15 +102,25 @@ getAllRequests(
 getDeployedRequest(){
   this.loading = true;
   this.subscriptions.push(
-    this.deployService.getAll().subscribe(
-      (response: ApiResponse<[]>) => {
-        this.allRequests = response;
+    this.deployService.getAll( this.currentPage,
+      this.itemsPerPage,
+      this.sortBy = 'requestDate',
+      this.sortDirection
+    ).pipe(
+      takeUntil(this.destroy$),
+      finalize(() => this.loading = false)
+    ).subscribe({
+      next: (response: ApiResponse<[]>) => {
+        this.allRequests = response.data.data;
+        this.totalItems = response.data.data.length;
         this.loading = false;
       },
-      (error) => {
+      error: (error) => {
         console.log(error);
+        this.error = error.message;
         this.loading = false
-      })
+      }
+})
   )
 }
 
@@ -236,6 +248,15 @@ openModal(request: any): void {
   this.data = request;
 }
 
+approveModal(request: any): void {
+  this.showDialog = true;
+  this.accept = true;
+  this.rejectForm.patchValue({
+    approvedNoOfPos: request.noOfPos
+  })
+  this.data = request;
+}
+
 closeModal(): void {
   this.showDialog = false;
 }
@@ -243,6 +264,27 @@ closeModal(): void {
 disapproveRequest(): void {
   const payload = {
     status: 'rejected',
+    notes: this.rejectForm.value.notes,
+    approvedById: this.user.id
+  }
+this.subscriptions.push(
+  this.approveService.approveRequest(this.data.id, payload).subscribe(
+    (response) => {
+      this.getApprovedRequest();
+      this.data = {};
+      this.showDialog = false;
+    },
+    (error) => {
+      console.log(error);
+    }
+  )
+)
+}
+
+approveRequest(): void {
+  const payload = {
+    status: 'approved',
+    approvedNoOfPos: this.rejectForm.value.approvedNoOfPos,
     notes: this.rejectForm.value.notes,
     approvedById: this.user.id
   }

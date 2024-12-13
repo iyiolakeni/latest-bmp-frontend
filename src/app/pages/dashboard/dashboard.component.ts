@@ -6,6 +6,7 @@ import {Chart, ChartConfiguration, ChartType, registerables} from 'chart.js';
 import { finalize, forkJoin, Observable, Subscription } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { ApproveRequestService } from '../../services/approve-request/approve-request.service';
+import { DeployedTableService } from '../../services/deployed-table/deployed-table.service';
 
 interface StatusCard {
   title: string;
@@ -141,6 +142,7 @@ export class DashboardComponent {
     private requestService: RequestsService,
     private sharedService: SharedServiceService,
     private approvalService: ApproveRequestService,
+    private deployService: DeployedTableService,
     private cdr: ChangeDetectorRef
   ){
     Chart.register(...registerables);
@@ -216,10 +218,11 @@ export class DashboardComponent {
         approved: this.approvalService.getApprovedRequest(),
         rejected: this.approvalService.getRejectedRequest()
       };
-    } else {
+    } else if (this.user.jobPosition === 'POS Business Officer') {
       observables = {
-        deployed: this.requestService.getDeployedRequests(this.user.id),
-        delivered: this.requestService.getDeliveredRequests(this.user.id)
+        pending: this.deployService.getPendinRequest(),
+        deployed: this.deployService.getDeployedRequest(),
+        delivered: this.deployService.getDeliveredRequest()
       };
     }
   
@@ -431,6 +434,36 @@ updateStausCards():void{
       borderColor: 'border-rose-300', 
       textColor: 'text-rose-600',
       trend: '-3%'
+    }
+  ]
+} else if (this.user.jobPosition === 'POS Business Officer') {
+  this.statusCards = [
+    { 
+      title: 'Pending', 
+      count: this.pendingCount, 
+      iconName: 'trending_up',
+      bgColor: 'bg-amber-50', 
+      borderColor: 'border-amber-300', 
+      textColor: 'text-amber-600',
+      trend: '+12%'
+    },
+    { 
+      title: 'Deployed', 
+      count: this.deployedCount, 
+      iconName: 'rocket_launch',
+      bgColor: 'bg-sky-50', 
+      borderColor: 'border-sky-300', 
+      textColor: 'text-sky-600',
+      trend: '+22%'
+    },
+    { 
+      title: 'Delivered', 
+      count: this.deliveredCount, 
+      iconName: 'inventory_2',
+      bgColor: 'bg-indigo-50', 
+      borderColor: 'border-indigo-300', 
+      textColor: 'text-indigo-600',
+      trend: '+15%'
     }
   ]
 }

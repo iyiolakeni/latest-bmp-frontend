@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/app/login/login.component.html",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1734028616799,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1734028616799,
+            "name": "Commit-0",
+            "content": "<div class=\"flex justify-center items-center h-screen home\">\r\n    <div class=\"bg-gray-800 rounded-lg shadow-lg p-8 w-full max-w-md\">\r\n      <div class=\"text-center mb-6\">\r\n        <div class=\"flex justify-center\">\r\n          <img src=\"/assets/logo.jpg\" alt=\"Logo\" class=\"w-10 h-10 rounded-full object-cover\">\r\n        </div>\r\n\r\n        <h1 class=\"text-2xl font-bold text-white\">Welcome Back</h1>\r\n        <p class=\"text-gray-400 text-sm italic\">Take Control of Your POS Requests. Simplify Your Workflow.</p>\r\n      </div>\r\n  \r\n      <form [formGroup]=\"loginForm\" (submit)=\"login()\">\r\n        <div class=\"mb-4\">\r\n          <label for=\"email\" class=\"block text-gray-400 font-medium mb-2\">Username or Email</label>\r\n          <input id=\"email\" class=\"border-gray-700 text-black rounded-md px-2 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500\" placeholder=\"Enter your email or username\" required formControlName=\"usernameOrEmail\">\r\n        </div>\r\n  \r\n        <div class=\"mb-6\">\r\n            <label for=\"password\" class=\"block text-gray-400 font-medium mb-2\">Password</label>\r\n            <div class=\"relative\">\r\n              <input [type]=\"showPassword ? 'text' : 'password'\" id=\"password\" class=\"bg-white border-gray-700 text-black rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500\" placeholder=\"Enter your password\" required formControlName=\"password\">\r\n              <button type=\"button\" class=\"absolute inset-y-0 right-0 pr-3 flex items-center text-black\" (click)=\"togglePassword()\">\r\n                <ng-icon *ngIf=\"showPassword\" name=\"bootstrapEyeFill\" class=\"h-5 w-5\"></ng-icon>\r\n                <ng-icon *ngIf=\"!showPassword\" name=\"bootstrapEyeSlashFill\" class=\"h-5 w-5\"></ng-icon>\r\n              </button>\r\n            </div>\r\n          </div>\r\n  \r\n        <button type=\"submit\" class=\"bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500\">\r\n          <span *ngIf=\"!submit\">\r\n            Login\r\n          </span>\r\n            <div *ngIf=\"submit\" class=\"flex items-center justify-center bg-gray-100 rounded-lg shadow-md\">\r\n                <span class=\"mr-2 text-lg font-semibold text-blue-600\">Signing in</span>\r\n                <div class=\"flex space-x-1\">\r\n                  <div class=\"w-2 h-2 bg-blue-600 rounded-full animate-bounce\"></div>\r\n                  <div class=\"w-2 h-2 bg-blue-600 rounded-full animate-bounce\" style=\"animation-delay: -0.6s;\"></div>\r\n                  <div class=\"w-2 h-2 bg-blue-600 rounded-full animate-bounce\" style=\"animation-delay: -0.3s;\"></div>\r\n                </div>\r\n              </div>\r\n        </button>\r\n      </form>\r\n  \r\n      <div class=\"flex justify-center mt-4\">\r\n        <a class=\"text-blue-500 \">Don't have an account? <span class=\"cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</span></a>\r\n      </div>\r\n    </div>\r\n  </div>"
+        }
+    ]
+}

@@ -34,11 +34,11 @@ import {
   bootstrapSortUp,
   bootstrapTrash,
   bootstrapXCircle,
+  bootstrapExclamationTriangle
 } from '@ng-icons/bootstrap-icons';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { MatIconModule } from '@angular/material/icon';
 import { LoaderComponent } from './loader/loader.component';
-import { NewRequestComponent } from './pages/new-request/new-request.component';
 import { AllRequestComponent } from './pages/all-request/all-request.component';
 import { FormComponent } from './form/form.component';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -46,6 +46,7 @@ import { CreateFormComponent } from './create-form/create-form.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackbarComponent } from './snackbar/snackbar.component';
 import { ModalComponent } from './modal/modal.component';
+import { DeployDialogComponent } from './deploy-dialog/deploy-dialog.component';
 
 @NgModule({
   declarations: [
@@ -55,12 +56,12 @@ import { ModalComponent } from './modal/modal.component';
     SignUpComponent,
     DashboardComponent,
     LoaderComponent,
-    NewRequestComponent,
     AllRequestComponent,
     FormComponent,
     CreateFormComponent,
     SnackbarComponent,
-    ModalComponent
+    ModalComponent,
+    DeployDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -93,7 +94,8 @@ import { ModalComponent } from './modal/modal.component';
       bootstrapCheckCircle,
       bootstrapExclamationCircle,
       bootstrapInfoCircle,
-      bootstrapXCircle
+      bootstrapXCircle,
+      bootstrapExclamationTriangle
     }),
     MatIconModule,
     NgSelectModule

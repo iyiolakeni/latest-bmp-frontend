@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/app/services/approve-request/approve-request.service.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1734034266071,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1734034266071,
+            "name": "Commit-0",
+            "content": "import { HttpClient, HttpParams } from '@angular/common/http';\r\nimport { Injectable } from '@angular/core';\r\nimport { ErrorHandlerService } from '../error-handler/error-handler.service';\r\nimport { catchError, Observable } from 'rxjs';\r\nimport { APPROVE_REQUEST } from '../../constants/url.constants';\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\nexport class ApproveRequestService {\r\n\r\n  constructor(\r\n    private http: HttpClient,\r\n    private errorHandler: ErrorHandlerService\r\n  ) { }\r\n\r\n  getAll(\r\n    page: number = 1,\r\n    limit: number = 10,\r\n    sortBy: string = 'createdAt',\r\n    sortDirection: string = 'desc'\r\n  ): Observable<any>{\r\n    let params = new HttpParams()\r\n    .set('page', page)\r\n    .set('limit', limit)\r\n    .set('sortBy', sortBy)\r\n    .set('sortDirection', sortDirection);\r\n    return this.http.get(`${APPROVE_REQUEST}/get-all`, {params}).pipe(\r\n      catchError(this.errorHandler.errorHandler)\r\n    )\r\n  }\r\n\r\n  approveRequest(id: string, formData: any): Observable<any>{\r\n    return this.http.patch(`${APPROVE_REQUEST}/update-status/${id}`, formData).pipe(\r\n      catchError(\r\n        this.errorHandler.errorHandler\r\n      )\r\n    )\r\n  }\r\n\r\n  getRequestById(id: string): Observable<any>{\r\n    return this.http.get(`${APPROVE_REQUEST}/get-by-id/${id}`).pipe(\r\n      catchError(\r\n        this.errorHandler.errorHandler)\r\n      )\r\n  }\r\n\r\n  getApprovedRequest(): Observable<any>{\r\n    return this.http.get(`${APPROVE_REQUEST}/get-all-approved-request`).pipe(\r\n      catchError(\r\n        this.errorHandler.errorHandler\r\n      )\r\n    )\r\n  }\r\n\r\n  getPendinRequest(): Observable<any>{\r\n    return this.http.get(`${APPROVE_REQUEST}/get-all-pending-request`).pipe(\r\n      catchError(\r\n        this.errorHandler.errorHandler\r\n      )\r\n    )\r\n  }\r\n\r\n  getRejectedRequest(): Observable<any>{\r\n    return this.http.get(`${APPROVE_REQUEST}/get-all-rejected-request`).pipe(\r\n       catchError(this.errorHandler.errorHandler)\r\n    )\r\n  }\r\n\r\n}\r\n"
+        }
+    ]
+}

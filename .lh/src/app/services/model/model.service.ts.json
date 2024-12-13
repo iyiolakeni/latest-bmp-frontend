@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/app/services/model/model.service.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1734035796700,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1734035796700,
+            "name": "Commit-0",
+            "content": "import { Injectable } from '@angular/core';\r\nimport { MODEL } from '../../constants/url.constants';\r\nimport { HttpClient } from '@angular/common/http';\r\nimport { Observable, catchError } from 'rxjs';\r\nimport { ErrorHandlerService } from '../error-handler/error-handler.service';\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\nexport class ModelService {\r\n\r\n  constructor(\r\n    private http: HttpClient,\r\n    private errorHandler: ErrorHandlerService\r\n  ) { }\r\n\r\n  create(formdata: any): Observable<any> {\r\n    return this.http.post(`${MODEL}/create`, formdata).pipe(\r\n      catchError(this.errorHandler.errorHandler)\r\n    )\r\n  }\r\n\r\n  getAll(): Observable<any> {\r\n    return this.http.get(`${MODEL}/get-all`).pipe(\r\n      catchError(this.errorHandler.errorHandler)\r\n    )\r\n  }\r\n\r\n  getAllArchived(): Observable<any> {\r\n    return this.http.get(`${MODEL}/get-all-archived`).pipe(\r\n      catchError(this.errorHandler.errorHandler)\r\n    )\r\n  }\r\n\r\n  getById(id: any): Observable<any> {\r\n    return this.http.get(`${MODEL}/get-by-id/${id}`).pipe(\r\n      catchError(this.errorHandler.errorHandler)\r\n    )\r\n  }\r\n\r\n  update(id: string, formData: any): Observable<any> {\r\n    return this.http.patch(`${MODEL}/update/${id}`, formData).pipe(\r\n      catchError(this.errorHandler.errorHandler)\r\n    )\r\n  }\r\n\r\n  activate(id: string): Observable<any> {\r\n    return this.http.patch(`${MODEL}/activate/${id}`, {}).pipe(\r\n      catchError(this.errorHandler.errorHandler)\r\n    )\r\n  }\r\n\r\n  deactivate(id: string): Observable<any> {\r\n    return this.http.patch(`${MODEL}/deactivate/${id}`, {}).pipe(\r\n      catchError(this.errorHandler.errorHandler)\r\n    )\r\n  }\r\n\r\n  archive(id: string): Observable<any> {\r\n    return this.http.patch(`${MODEL}/archive/${id}`, {}).pipe(\r\n      catchError(this.errorHandler.errorHandler)\r\n    )\r\n  }\r\n\r\n  restore(id: string): Observable<any> {\r\n    return this.http.patch(`${MODEL}/restore/${id}`, {}).pipe(\r\n      catchError(this.errorHandler.errorHandler)\r\n    )\r\n  }\r\n  delete(id: string): Observable<any> {\r\n    return this.http.delete(`${MODEL}/delete/${id}`).pipe(\r\n      catchError(this.errorHandler.errorHandler)\r\n    )\r\n  }\r\n}\r\n"
+        }
+    ]
+}

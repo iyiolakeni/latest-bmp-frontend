@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DEPLOYED_TABLE } from '../../constants/url.constants';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { catchError, Observable } from 'rxjs';
 
@@ -14,11 +14,41 @@ export class DeployedTableService {
     private errorHandler: ErrorHandlerService
   ) { }
 
-  getAll(): Observable<any>{
-    return this.http.get(`${DEPLOYED_TABLE}/get-all`).pipe(
+  getAll(
+    page: number = 1,
+    limit: number = 10,
+    sortBy: string = 'createdAt',
+    sortDirection: string = 'desc'
+  ): Observable<any>{
+    let params = new HttpParams()
+    .set('page', page)
+    .set('limit', limit)
+    .set('sortBy', sortBy)
+    .set('sortDirection', sortDirection);
+    return this.http.get(`${DEPLOYED_TABLE}/get-all`, {params}).pipe(
+      catchError(this.errorHandler.errorHandler)
+    )
+  }
+
+  getDeployedRequest(): Observable<any>{
+    return this.http.get(`${DEPLOYED_TABLE}/get-all-deployed-request`).pipe(
       catchError(
         this.errorHandler.errorHandler
       )
+    )
+  }
+
+  getPendinRequest(): Observable<any>{
+    return this.http.get(`${DEPLOYED_TABLE}/get-all-pending-request`).pipe(
+      catchError(
+        this.errorHandler.errorHandler
+      )
+    )
+  }
+
+  getDeliveredRequest(): Observable<any>{
+    return this.http.get(`${DEPLOYED_TABLE}/get-all-delivered-request`).pipe(
+       catchError(this.errorHandler.errorHandler)
     )
   }
 

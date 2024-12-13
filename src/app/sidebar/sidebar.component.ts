@@ -20,7 +20,7 @@ export class SidebarComponent {
     {
       icon: 'home',
       text: 'Home',
-      route: '/'
+      route: '/dashboard'
     },
     {
       icon: 'request',

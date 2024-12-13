@@ -46,7 +46,7 @@ export class ApproveRequestService {
   }
 
   getApprovedRequest(): Observable<any>{
-    return this.http.get(`${APPROVE_REQUEST}/get-all-pending-request`).pipe(
+    return this.http.get(`${APPROVE_REQUEST}/get-all-approved-request`).pipe(
       catchError(
         this.errorHandler.errorHandler
       )
