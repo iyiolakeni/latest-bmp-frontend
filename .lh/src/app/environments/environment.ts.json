@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/app/environments/environment.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1734169173924,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1734169173924,
+            "name": "Commit-0",
+            "content": "export const environment = {\r\n    prod: false,\r\n    apiUrl: 'https://bmp-node.onrender.com/'\r\n    // apiUrl: 'http://localhost:7000/'\r\n}"
+        }
+    ]
+}
