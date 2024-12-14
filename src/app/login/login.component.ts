@@ -17,6 +17,7 @@ export class LoginComponent {
   loginForm: FormGroup = new FormGroup({});
   private subscriptions: Subscription[] = [];
   submit: boolean = false;
+  apiResponse: string = '';
 
   constructor(
     private router: Router,
@@ -48,7 +49,14 @@ export class LoginComponent {
               this.sharedService.setUser(response.user);
               this.router.navigate(['dashboard']);
               this.submit = false;
+            }else{
+              this.submit = false;
+              this.apiResponse = response.message;
             }
+          },
+          (error)=>{
+            this.submit = false;
+            this.apiResponse = error.message;
           }
         )
       )

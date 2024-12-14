@@ -34,7 +34,8 @@ import {
   bootstrapSortUp,
   bootstrapTrash,
   bootstrapXCircle,
-  bootstrapExclamationTriangle
+  bootstrapExclamationTriangle,
+  bootstrapSendCheck
 } from '@ng-icons/bootstrap-icons';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -95,7 +96,8 @@ import { DeployDialogComponent } from './deploy-dialog/deploy-dialog.component';
       bootstrapExclamationCircle,
       bootstrapInfoCircle,
       bootstrapXCircle,
-      bootstrapExclamationTriangle
+      bootstrapExclamationTriangle,
+      bootstrapSendCheck
     }),
     MatIconModule,
     NgSelectModule

@@ -3,11 +3,15 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 0,
+            "activePatchIndex": 1,
             "patches": [
                 {
                     "date": 1734034266070,
                     "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1734165377722,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -52,17 +52,17 @@\n     )\r\n   }\r\n \r\n   deployRequest(id: string, formData: any): Observable<any>{\r\n-    return this.http.put(`${DEPLOYED_TABLE}/approve-status/${id}`, formData).pipe(\r\n+    return this.http.patch(`${DEPLOYED_TABLE}/approve-status/${id}`, formData).pipe(\r\n       catchError(\r\n         this.errorHandler.errorHandler\r\n       )\r\n     )\r\n   }\r\n \r\n   deliverRequest(id: string, formData: any): Observable<any>{\r\n-    return this.http.put(`${DEPLOYED_TABLE}/delivery-status/${id}`, formData).pipe(\r\n+    return this.http.patch(`${DEPLOYED_TABLE}/delivery-status/${id}`, formData).pipe(\r\n       catchError(\r\n         this.errorHandler.errorHandler\r\n       )\r\n     )\r\n"
                 }
             ],
             "date": 1734034266070,

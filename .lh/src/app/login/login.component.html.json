@@ -3,11 +3,19 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 0,
+            "activePatchIndex": 2,
             "patches": [
                 {
                     "date": 1734028616799,
                     "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1734166895228,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,17 +29,21 @@\n         <button type=\"submit\" class=\"bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500\">\r\n           <span *ngIf=\"!submit\">\r\n             Login\r\n           </span>\r\n-            <div *ngIf=\"submit\" class=\"flex items-center justify-center bg-gray-100 rounded-lg shadow-md\">\r\n+            <div *ngIf=\"submit\" class=\"flex items-center justify-center\">\r\n                 <span class=\"mr-2 text-lg font-semibold text-blue-600\">Signing in</span>\r\n                 <div class=\"flex space-x-1\">\r\n-                  <div class=\"w-2 h-2 bg-blue-600 rounded-full animate-bounce\"></div>\r\n-                  <div class=\"w-2 h-2 bg-blue-600 rounded-full animate-bounce\" style=\"animation-delay: -0.6s;\"></div>\r\n-                  <div class=\"w-2 h-2 bg-blue-600 rounded-full animate-bounce\" style=\"animation-delay: -0.3s;\"></div>\r\n+                  <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\"></div>\r\n+                  <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\" style=\"animation-delay: -0.6s;\"></div>\r\n+                  <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\" style=\"animation-delay: -0.3s;\"></div>\r\n                 </div>\r\n               </div>\r\n         </button>\r\n+        <!-- <div class=\"flex justify-end mt-4\">\r\n+          <a class=\"text-blue-500 \">Forgot Password?</a>\r\n+        </div> -->\r\n+        <div class=\"text-red-500 text-sm mt-2\" *ngIf=\"apiResponse !== ''\">{{apiResponse}}</div>\r\n       </form>\r\n   \r\n       <div class=\"flex justify-center mt-4\">\r\n         <a class=\"text-blue-500 \">Don't have an account? <span class=\"cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</span></a>\r\n"
+                },
+                {
+                    "date": 1734166929890,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,9 +30,9 @@\n           <span *ngIf=\"!submit\">\r\n             Login\r\n           </span>\r\n             <div *ngIf=\"submit\" class=\"flex items-center justify-center\">\r\n-                <span class=\"mr-2 text-lg font-semibold text-blue-600\">Signing in</span>\r\n+                <span class=\"mr-2 text-lg font-semibold text-white\">Signing in</span>\r\n                 <div class=\"flex space-x-1\">\r\n                   <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\"></div>\r\n                   <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\" style=\"animation-delay: -0.6s;\"></div>\r\n                   <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\" style=\"animation-delay: -0.3s;\"></div>\r\n"
                 }
             ],
             "date": 1734028616799,

@@ -3,11 +3,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ApiResponse, UserResponse } from '../interface/books.model';
 import { SharedServiceService } from '../services/shared-service/shared-service.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MerchantService } from '../services/merchant/merchant.service';
-import { BusinessCategoryService } from '../services/business-category/business-category.service';
-import { CardTypeService } from '../services/card-type/card-type.service';
 import { Subscription } from 'rxjs';
-import { RequestsService } from '../services/requests/requests.service';
+import { ModelService } from '../services/model/model.service';
+import { PtspService } from '../services/ptsp/ptsp.service';
+import { ProcessorService } from '../services/processor/processor.service';
+import { AccountService } from '../services/account/account.service';
+import { DeployedTableService } from '../services/deployed-table/deployed-table.service';
 @Component({
   selector: 'app-deploy-dialog',
   templateUrl: './deploy-dialog.component.html',
@@ -17,42 +18,43 @@ export class DeployDialogComponent {
   selectedIndex = 0;
   user!: UserResponse;
   formGroup: FormGroup = new FormGroup({});
-  merchant: any;
-  cardType: any;
-  businessCategory: any;
+  model: any;
+  ptsp: any;
+  account: any;
+  processor: any;
   private subscriptions: Subscription[] = [];
   apiResponse: string = '';
   show: boolean = false;
   message: string = '';
-  tabs = [{ label: 'REQUEST FORM' }];
+  tabs = [{ label: 'DEPLOYMENT FORM' }];
+  userId : string =  '';
+  isLoading: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<DeployDialogComponent>,
     private sharedService: SharedServiceService,
     private fb: FormBuilder,
-    private merchantService: MerchantService,
-    private businessCategoryService: BusinessCategoryService,
-    private cardTypService: CardTypeService,
-    private service: RequestsService,
+    private modelService: ModelService,
+    private ptspService: PtspService,
+    private processorService: ProcessorService,
+    private accountService: AccountService,
+    private service: DeployedTableService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.formGroup = this.fb.group({
-      noOfPos: [0, Validators.required],
-      terminalLocation: [[], Validators.required],
-      contactPerson: ['', Validators.required],
-      contactNumber: ['', Validators.required],
-      bankName: ['', Validators.required],
-      accountNumber: ['', Validators.required],
       notes: [''],
-      cardTypeId: ['', Validators.required],
-      businessCategoryId: ['', Validators.required],
-      merchantId: ['', Validators.required],
+      modelId: ['', Validators.required],
+      ptspId: ['', Validators.required],
+      processorId: ['', Validators.required],
+      accountId: ['', Validators.required],
     });
   }
 
   ngOnInit() {
     this.user = this.sharedService.getUser();
     this.loadExtraData();
+    this.userId = this.user.id;
+    console.log(this.userId);
   }
 
   toTitleCase(str: string): string {
@@ -67,29 +69,40 @@ export class DeployDialogComponent {
   }
 
   loadExtraData() {
-    this.merchantList();
-    this.cardList();
-    this.businessCategoryList();
+    this.modelList();
+    this.ptspList();
+    this.processorList();
+    this.accountList();
   }
 
-  merchantList() {
-    this.subscriptions.push(this.merchantService.getAll().subscribe((response: ApiResponse<any>) => {
-      this.merchant = response.data.data;
+  modelList() {
+    this.subscriptions.push(this.modelService.getAll().subscribe((response: ApiResponse<any>) => {
+      this.model = response.data.data;
     }));
   }
 
-  cardList() {
-    this.subscriptions.push(this.cardTypService.getAll().subscribe((response: ApiResponse<any>) => {
-      this.cardType = response.data.data;
+  ptspList() {
+    this.subscriptions.push(this.ptspService.getAll().subscribe((response: ApiResponse<any>) => {
+      this.ptsp = response.data.data;
     }));
   }
 
-  businessCategoryList() {
+  processorList() {
     this.subscriptions.push(
-      this.businessCategoryService
+      this.processorService
         .getAll()
         .subscribe((response: ApiResponse<any>) => {
-          this.businessCategory = response.data.data;
+          this.processor = response.data.data;
+        })
+    );
+  }
+
+  accountList() {
+    this.subscriptions.push(
+      this.accountService
+        .getAll()
+        .subscribe((response: ApiResponse<any>) => {
+          this.account = response.data.data;
         })
     );
   }
@@ -99,18 +112,21 @@ export class DeployDialogComponent {
   }
 
   onSubmit() {
-    console.log(this.formGroup.value);
+    this.isLoading = true;
     if (this.formGroup.valid) {
       const payload ={
         ...this.formGroup.value,
-        userId: this.user.id,
+        status: 'deployed',
+        approvedNoOfPos: this.data.approveNoOfPos,
+        deployedById: this.userId,
       } 
       this.subscriptions.push(
-        this.service.create(payload).subscribe((response: ApiResponse<any>) => {
+        this.service.deployRequest(this.data.request.id,payload).subscribe((response: ApiResponse<any>) => {
           if (response.data.success) {
             this.show = true;
             this.message = 'success'
             this.apiResponse = response.data.message;
+            this.isLoading = false;
             setTimeout(() =>{
               this.show = false;
               this.dialogRef.close();
@@ -118,7 +134,8 @@ export class DeployDialogComponent {
           } else {
             this.show = true;
             this.message = 'error'
-            this.apiResponse = "Error creating request, try again";
+            this.apiResponse = response.data.message;
+            this.isLoading = false;
             setTimeout(() =>{
               this.show = false;
             }, 5000)
@@ -127,6 +144,7 @@ export class DeployDialogComponent {
       );
     }else{
       this.show = true;
+      this.isLoading = false;
       this.message = 'warning'
       this.apiResponse = 'Please fill all required fields';
       setTimeout(() =>{

@@ -1,0 +1,17 @@
+::ng-deep .custom-merchant-select .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 10px;
+    transition: all 0.2s ease;
+  }
+  
+  ::ng-deep .custom-merchant-select .ng-dropdown-panel .ng-dropdown-panel-items .ng-option:hover {
+    background-color: #e0e0e0;
+  }
+  
+  ::ng-deep .custom-merchant-select .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
+    background-color: #007bff;
+    color: white;
+  }
+
+  

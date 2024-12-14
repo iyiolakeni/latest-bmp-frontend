@@ -171,7 +171,14 @@
             class="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-md"
             type="submit"
           >
+          <span *ngIf="!isLoading">
             Submit
+          </span>
+            <div class="flex space-x-1" *ngIf="isLoading">
+              <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+              <div class="w-2 h-2 bg-white rounded-full animate-bounce" style="animation-delay: -0.6s;"></div>
+              <div class="w-2 h-2 bg-white rounded-full animate-bounce" style="animation-delay: -0.3s;"></div>
+            </div>
           </button>
         </div>
       </div>

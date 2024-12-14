@@ -11,6 +11,15 @@
   z-index: 1000; /* Increase the z-index to ensure the dialog appears on top */
 }
 
+.dialog-container .mat-dialog-container {
+  @apply rounded-xl shadow-2xl;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 45%;
+  z-index: 1000; /* Increase the z-index to ensure the dialog appears on top */
+}
+
 .cdk-overlay-container{
   position: absolute;
   top: 20%;
@@ -34,4 +43,5 @@
   color: white;
 
 }
+
 

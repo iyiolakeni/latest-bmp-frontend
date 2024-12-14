@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 4,
+            "activePatchIndex": 18,
             "patches": [
                 {
                     "date": 1734030494340,
@@ -24,6 +24,62 @@
                 {
                     "date": 1734035041483,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -101,17 +101,27 @@\n \r\n getDeployedRequest(){\r\n   this.loading = true;\r\n   this.subscriptions.push(\r\n-    this.deployService.getAll().subscribe(\r\n-      (response: ApiResponse<[]>) => {\r\n-        this.allRequests = response;\r\n+    this.deployService.getAll( this.currentPage,\r\n+      this.itemsPerPage,\r\n+      this.sortBy = 'requestDate',\r\n+      this.sortDirection\r\n+    ).pipe(\r\n+      takeUntil(this.destroy$),\r\n+      finalize(() => this.loading = false)\r\n+    ).subscribe({\r\n+      next: (response: ApiResponse<[]>) => {\r\n+        this.allRequests = response.data.data;\r\n+        this.totalItems = response.data.data.length;\r\n         this.loading = false;\r\n       },\r\n-      (error) => {\r\n+      error: (error) => {\r\n         console.log(error);\r\n+        this.error = error.message;\r\n         this.loading = false\r\n-      })\r\n+      }\r\n+})\r\n   )\r\n }\r\n \r\n getApprovedRequest(){\r\n"
+                },
+                {
+                    "date": 1734161823879,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -208,8 +208,9 @@\n   }\r\n }\r\n \r\n viewRequest(request: any): void {\r\n+  console.log(request);\r\n   this.dialog.open(FormComponent, {\r\n     width: '900px',\r\n       maxHeight: '90vh',\r\n       panelClass: 'custom-dialog-container',\r\n"
+                },
+                {
+                    "date": 1734162188985,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -208,9 +208,8 @@\n   }\r\n }\r\n \r\n viewRequest(request: any): void {\r\n-  console.log(request);\r\n   this.dialog.open(FormComponent, {\r\n     width: '900px',\r\n       maxHeight: '90vh',\r\n       panelClass: 'custom-dialog-container',\r\n"
+                },
+                {
+                    "date": 1734162309016,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -78,9 +78,9 @@\n   this.subscriptions.push(\r\n     this.requestService.getAll(\r\n       this.currentPage,\r\n       this.itemsPerPage,\r\n-      this.sortBy = 'requestDate',\r\n+      this.sortBy = 'createdAt',\r\n       this.sortDirection\r\n     ).pipe(\r\n       takeUntil(this.destroy$),\r\n       finalize(() => this.loading = false)\r\n"
+                },
+                {
+                    "date": 1734163673726,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,8 +8,9 @@\n import { MatDialog } from '@angular/material/dialog';\r\n import { FormComponent } from '../../form/form.component';\r\n import { CreateFormComponent } from '../../create-form/create-form.component';\r\n import { FormBuilder, FormGroup, Validators } from '@angular/forms';\r\n+import { DeployDialogComponent } from '../../deploy-dialog/deploy-dialog.component';\r\n \r\n \r\n @Component({\r\n   selector: 'app-all-request',\r\n@@ -229,9 +230,22 @@\n     this.getAllRequests();\r\n   })\r\n }\r\n \r\n+deployModal(request: any): void {\r\n+  const dialogRef = this.dialog.open(DeployDialogComponent, {\r\n+    width: '900px',\r\n+      maxHeight: '90vh',\r\n+      panelClass: 'custom-dialog-container',\r\n+      data: {request, isView: false}\r\n+  })\r\n \r\n+  dialogRef.afterClosed().subscribe(result => {\r\n+    this.getAllRequests();\r\n+  })\r\n+}\r\n+\r\n+\r\n createRequest(): void {\r\n   const dialogRef = this.dialog.open(CreateFormComponent, {\r\n     width: '900px',\r\n       maxHeight: '90vh',\r\n"
+                },
+                {
+                    "date": 1734164328504,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -232,9 +232,9 @@\n }\r\n \r\n deployModal(request: any): void {\r\n   const dialogRef = this.dialog.open(DeployDialogComponent, {\r\n-    width: '900px',\r\n+    width: '50px',\r\n       maxHeight: '90vh',\r\n       panelClass: 'custom-dialog-container',\r\n       data: {request, isView: false}\r\n   })\r\n"
+                },
+                {
+                    "date": 1734164338745,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -232,9 +232,9 @@\n }\r\n \r\n deployModal(request: any): void {\r\n   const dialogRef = this.dialog.open(DeployDialogComponent, {\r\n-    width: '50px',\r\n+    width: '500px',\r\n       maxHeight: '90vh',\r\n       panelClass: 'custom-dialog-container',\r\n       data: {request, isView: false}\r\n   })\r\n"
+                },
+                {
+                    "date": 1734164419293,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -232,9 +232,9 @@\n }\r\n \r\n deployModal(request: any): void {\r\n   const dialogRef = this.dialog.open(DeployDialogComponent, {\r\n-    width: '500px',\r\n+    width: '900px',\r\n       maxHeight: '90vh',\r\n       panelClass: 'custom-dialog-container',\r\n       data: {request, isView: false}\r\n   })\r\n"
+                },
+                {
+                    "date": 1734164490833,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -232,9 +232,9 @@\n }\r\n \r\n deployModal(request: any): void {\r\n   const dialogRef = this.dialog.open(DeployDialogComponent, {\r\n-    width: '900px',\r\n+    width: '500px',\r\n       maxHeight: '90vh',\r\n       panelClass: 'custom-dialog-container',\r\n       data: {request, isView: false}\r\n   })\r\n"
+                },
+                {
+                    "date": 1734164588823,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -234,8 +234,9 @@\n deployModal(request: any): void {\r\n   const dialogRef = this.dialog.open(DeployDialogComponent, {\r\n     width: '500px',\r\n       maxHeight: '90vh',\r\n+      left: '30%',\r\n       panelClass: 'custom-dialog-container',\r\n       data: {request, isView: false}\r\n   })\r\n \r\n"
+                },
+                {
+                    "date": 1734164610456,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -234,9 +234,8 @@\n deployModal(request: any): void {\r\n   const dialogRef = this.dialog.open(DeployDialogComponent, {\r\n     width: '500px',\r\n       maxHeight: '90vh',\r\n-      left: '30%',\r\n       panelClass: 'custom-dialog-container',\r\n       data: {request, isView: false}\r\n   })\r\n \r\n"
+                },
+                {
+                    "date": 1734165154684,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -232,9 +232,9 @@\n }\r\n \r\n deployModal(request: any): void {\r\n   const dialogRef = this.dialog.open(DeployDialogComponent, {\r\n-    width: '500px',\r\n+    width: '900px',\r\n       maxHeight: '90vh',\r\n       panelClass: 'custom-dialog-container',\r\n       data: {request, isView: false}\r\n   })\r\n"
+                },
+                {
+                    "date": 1734165223644,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -234,9 +234,9 @@\n deployModal(request: any): void {\r\n   const dialogRef = this.dialog.open(DeployDialogComponent, {\r\n     width: '900px',\r\n       maxHeight: '90vh',\r\n-      panelClass: 'custom-dialog-container',\r\n+      panelClass: 'dialog-container',\r\n       data: {request, isView: false}\r\n   })\r\n \r\n   dialogRef.afterClosed().subscribe(result => {\r\n"
+                },
+                {
+                    "date": 1734166245505,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -239,9 +239,9 @@\n       data: {request, isView: false}\r\n   })\r\n \r\n   dialogRef.afterClosed().subscribe(result => {\r\n-    this.getAllRequests();\r\n+    this.getDeployedRequest();\r\n   })\r\n }\r\n \r\n \r\n"
+                },
+                {
+                    "date": 1734168796992,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,8 +26,9 @@\n totalItems = 0;\r\n isView: boolean = false;\r\n data: any = {};\r\n rejectForm: FormGroup = new FormGroup({});\r\n+isLoading: boolean = false;\r\n \r\n readonly STATUS_COLORS: { [key: string]: string } = {\r\n   'pending': 'bg-yellow-100 text-yellow-800',\r\n   'deployed': 'bg-blue-100 text-blue-800',\r\n@@ -275,8 +276,9 @@\n   this.showDialog = false;\r\n }\r\n \r\n disapproveRequest(): void {\r\n+  this.isLoading = true;\r\n   const payload = {\r\n     status: 'rejected',\r\n     notes: this.rejectForm.value.notes,\r\n     approvedById: this.user.id\r\n@@ -286,17 +288,23 @@\n     (response) => {\r\n       this.getApprovedRequest();\r\n       this.data = {};\r\n       this.showDialog = false;\r\n+  this.isLoading = false;\r\n+\r\n     },\r\n     (error) => {\r\n       console.log(error);\r\n+  this.isLoading = false;\r\n+\r\n     }\r\n   )\r\n )\r\n }\r\n \r\n approveRequest(): void {\r\n+  this.isLoading = true;\r\n+\r\n   const payload = {\r\n     status: 'approved',\r\n     approvedNoOfPos: this.rejectForm.value.approvedNoOfPos,\r\n     notes: this.rejectForm.value.notes,\r\n@@ -307,11 +315,15 @@\n     (response) => {\r\n       this.getApprovedRequest();\r\n       this.data = {};\r\n       this.showDialog = false;\r\n+  this.isLoading = false;\r\n+\r\n     },\r\n     (error) => {\r\n       console.log(error);\r\n+  this.isLoading = false;\r\n+\r\n     }\r\n   )\r\n )\r\n }\r\n"
                 }
             ],
             "date": 1734030494340,

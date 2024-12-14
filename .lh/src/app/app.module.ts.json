@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 2,
+            "activePatchIndex": 3,
             "patches": [
                 {
                     "date": 1734031425762,
@@ -16,6 +16,10 @@
                 {
                     "date": 1734032408224,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -38,9 +38,8 @@\n } from '@ng-icons/bootstrap-icons';\r\n import { DashboardComponent } from './pages/dashboard/dashboard.component';\r\n import { MatIconModule } from '@angular/material/icon';\r\n import { LoaderComponent } from './loader/loader.component';\r\n-import { NewRequestComponent } from './pages/new-request/new-request.component';\r\n import { AllRequestComponent } from './pages/all-request/all-request.component';\r\n import { FormComponent } from './form/form.component';\r\n import { NgSelectModule } from '@ng-select/ng-select';\r\n import { CreateFormComponent } from './create-form/create-form.component';\r\n@@ -55,9 +54,8 @@\n     LoginComponent,\r\n     SignUpComponent,\r\n     DashboardComponent,\r\n     LoaderComponent,\r\n-    NewRequestComponent,\r\n     AllRequestComponent,\r\n     FormComponent,\r\n     CreateFormComponent,\r\n     SnackbarComponent,\r\n"
+                },
+                {
+                    "date": 1734163673728,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -33,9 +33,10 @@\n   bootstrapSliders2Vertical,\r\n   bootstrapSortUp,\r\n   bootstrapTrash,\r\n   bootstrapXCircle,\r\n-  bootstrapExclamationTriangle\r\n+  bootstrapExclamationTriangle,\r\n+  bootstrapSendCheck\r\n } from '@ng-icons/bootstrap-icons';\r\n import { DashboardComponent } from './pages/dashboard/dashboard.component';\r\n import { MatIconModule } from '@angular/material/icon';\r\n import { LoaderComponent } from './loader/loader.component';\r\n@@ -45,8 +46,9 @@\n import { CreateFormComponent } from './create-form/create-form.component';\r\n import { MatSnackBarModule } from '@angular/material/snack-bar';\r\n import { SnackbarComponent } from './snackbar/snackbar.component';\r\n import { ModalComponent } from './modal/modal.component';\r\n+import { DeployDialogComponent } from './deploy-dialog/deploy-dialog.component';\r\n \r\n @NgModule({\r\n   declarations: [\r\n     AppComponent,\r\n@@ -58,9 +60,10 @@\n     AllRequestComponent,\r\n     FormComponent,\r\n     CreateFormComponent,\r\n     SnackbarComponent,\r\n-    ModalComponent\r\n+    ModalComponent,\r\n+    DeployDialogComponent\r\n   ],\r\n   imports: [\r\n     BrowserModule,\r\n     BrowserAnimationsModule,\r\n@@ -92,9 +95,10 @@\n       bootstrapCheckCircle,\r\n       bootstrapExclamationCircle,\r\n       bootstrapInfoCircle,\r\n       bootstrapXCircle,\r\n-      bootstrapExclamationTriangle\r\n+      bootstrapExclamationTriangle,\r\n+      bootstrapSendCheck\r\n     }),\r\n     MatIconModule,\r\n     NgSelectModule\r\n   ],\r\n"
                 }
             ],
             "date": 1734031425762,

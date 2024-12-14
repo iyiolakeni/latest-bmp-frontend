@@ -53,7 +53,7 @@ export class DeployedTableService {
   }
 
   deployRequest(id: string, formData: any): Observable<any>{
-    return this.http.put(`${DEPLOYED_TABLE}/approve-status/${id}`, formData).pipe(
+    return this.http.patch(`${DEPLOYED_TABLE}/approve-status/${id}`, formData).pipe(
       catchError(
         this.errorHandler.errorHandler
       )
@@ -61,7 +61,7 @@ export class DeployedTableService {
   }
 
   deliverRequest(id: string, formData: any): Observable<any>{
-    return this.http.put(`${DEPLOYED_TABLE}/delivery-status/${id}`, formData).pipe(
+    return this.http.patch(`${DEPLOYED_TABLE}/delivery-status/${id}`, formData).pipe(
       catchError(
         this.errorHandler.errorHandler
       )

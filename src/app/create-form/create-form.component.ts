@@ -26,6 +26,7 @@ export class CreateFormComponent {
   show: boolean = false;
   message: string = '';
   tabs = [{ label: 'REQUEST FORM' }];
+  isLoading: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<CreateFormComponent>,
@@ -100,7 +101,7 @@ export class CreateFormComponent {
   }
 
   onSubmit() {
-    console.log(this.formGroup.value);
+    this.isLoading = true;
     if (this.formGroup.valid) {
       const payload ={
         ...this.formGroup.value,
@@ -112,6 +113,7 @@ export class CreateFormComponent {
             this.show = true;
             this.message = 'success'
             this.apiResponse = response.data.message;
+            this.isLoading = false;
             setTimeout(() =>{
               this.show = false;
               this.dialogRef.close();
@@ -120,6 +122,7 @@ export class CreateFormComponent {
             this.show = true;
             this.message = 'error'
             this.apiResponse = "Error creating request, try again";
+            this.isLoading = false;
             setTimeout(() =>{
               this.show = false;
             }, 5000)
@@ -128,6 +131,7 @@ export class CreateFormComponent {
       );
     }else{
       this.show = true;
+      this.isLoading = false;
       this.message = 'warning'
       this.apiResponse = 'Please fill all required fields';
       setTimeout(() =>{

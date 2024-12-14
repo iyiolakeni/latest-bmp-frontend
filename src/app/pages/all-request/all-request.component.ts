@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormComponent } from '../../form/form.component';
 import { CreateFormComponent } from '../../create-form/create-form.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DeployDialogComponent } from '../../deploy-dialog/deploy-dialog.component';
 
 
 @Component({
@@ -26,6 +27,7 @@ totalItems = 0;
 isView: boolean = false;
 data: any = {};
 rejectForm: FormGroup = new FormGroup({});
+isLoading: boolean = false;
 
 readonly STATUS_COLORS: { [key: string]: string } = {
   'pending': 'bg-yellow-100 text-yellow-800',
@@ -79,7 +81,7 @@ getAllRequests(
     this.requestService.getAll(
       this.currentPage,
       this.itemsPerPage,
-      this.sortBy = 'requestDate',
+      this.sortBy = 'createdAt',
       this.sortDirection
     ).pipe(
       takeUntil(this.destroy$),
@@ -230,6 +232,19 @@ editRequest(request: any): void {
   })
 }
 
+deployModal(request: any): void {
+  const dialogRef = this.dialog.open(DeployDialogComponent, {
+    width: '900px',
+      maxHeight: '90vh',
+      panelClass: 'dialog-container',
+      data: {request, isView: false}
+  })
+
+  dialogRef.afterClosed().subscribe(result => {
+    this.getDeployedRequest();
+  })
+}
+
 
 createRequest(): void {
   const dialogRef = this.dialog.open(CreateFormComponent, {
@@ -262,6 +277,7 @@ closeModal(): void {
 }
 
 disapproveRequest(): void {
+  this.isLoading = true;
   const payload = {
     status: 'rejected',
     notes: this.rejectForm.value.notes,
@@ -273,15 +289,21 @@ this.subscriptions.push(
       this.getApprovedRequest();
       this.data = {};
       this.showDialog = false;
+  this.isLoading = false;
+
     },
     (error) => {
       console.log(error);
+  this.isLoading = false;
+
     }
   )
 )
 }
 
 approveRequest(): void {
+  this.isLoading = true;
+
   const payload = {
     status: 'approved',
     approvedNoOfPos: this.rejectForm.value.approvedNoOfPos,
@@ -294,9 +316,13 @@ this.subscriptions.push(
       this.getApprovedRequest();
       this.data = {};
       this.showDialog = false;
+  this.isLoading = false;
+
     },
     (error) => {
       console.log(error);
+  this.isLoading = false;
+
     }
   )
 )

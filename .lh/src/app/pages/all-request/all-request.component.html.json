@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 14,
+            "activePatchIndex": 16,
             "patches": [
                 {
                     "date": 1734029472859,
@@ -64,6 +64,14 @@
                 {
                     "date": 1734032037221,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -324,9 +324,9 @@\n                 <ng-container *ngIf=\"accept\">\r\n                   <label class=\"block text-xs font-medium text-gray-500 uppercase\"\r\n                     >Number of Pos to be Approved</label\r\n                   >\r\n-                  <input type=\"text\" formControlName=\"approveNoOfPos\" class=\"w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-700\">\r\n+                  <input type=\"text\" formControlName=\"approvedNoOfPos\" class=\"w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-700\">\r\n                 </ng-container>\r\n                   <textarea class=\"p-2 mt-2 w-full border border-gray-300 rounded-lg bg-white text-gray-900\" placeholder=\"Notes...\" formControlName=\"notes\"></textarea>\r\n               </div>\r\n             </div>\r\n"
+                },
+                {
+                    "date": 1734163673723,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -241,8 +241,15 @@\n                   (click)=\"approveModal(request)\"\r\n                 >\r\n                   <ng-icon name=\"bootstrapCheckCircle\"></ng-icon>\r\n                 </button>\r\n+                <button *ngIf=\"request.status === 'pending' && user.jobPosition === 'POS Business Officer'\"\r\n+                  class=\"text-green-600 hover:text-green-900 transition-colors\"\r\n+                  title=\"Approve Request\"\r\n+                  (click)=\"deployModal(request)\"\r\n+                >\r\n+                  <ng-icon name=\"bootstrapSendCheck\"></ng-icon>\r\n+                </button>\r\n                 <button *ngIf=\"request.status === 'pending' && user.jobPosition === 'Business Developer'\"\r\n                   class=\"text-red-600 hover:text-red-900 transition-colors\"\r\n                   title=\"Disapprove Request\"\r\n                   (click)=\"openModal(request)\"\r\n"
+                },
+                {
+                    "date": 1734168797001,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -340,11 +340,29 @@\n           </div>\r\n         </div>\r\n         <div class=\"bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6\">\r\n           <button type=\"button\" class=\"inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto\" type=\"submit\" *ngIf=\"!accept\" (click)=\"disapproveRequest()\"\r\n-          >Reject</button>\r\n+          >\r\n+          <span *ngIf=\"!isLoading\">\r\n+            Reject\r\n+          </span>\r\n+          <div class=\"flex space-x-1\" *ngIf=\"isLoading\">\r\n+            <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\"></div>\r\n+            <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\" style=\"animation-delay: -0.6s;\"></div>\r\n+            <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\" style=\"animation-delay: -0.3s;\"></div>\r\n+          </div>\r\n+        </button>\r\n           <button type=\"button\" class=\"inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto\" type=\"submit\" *ngIf=\"accept\" (click)=\"approveRequest()\"\r\n-          >Approve</button>\r\n+          >\r\n+          <span *ngIf=\"!isLoading\">\r\n+            Approve\r\n+          </span>\r\n+          <div class=\"flex space-x-1\" *ngIf=\"isLoading\">\r\n+            <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\"></div>\r\n+            <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\" style=\"animation-delay: -0.6s;\"></div>\r\n+            <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\" style=\"animation-delay: -0.3s;\"></div>\r\n+          </div>\r\n+        </button>\r\n           <button type=\"button\" class=\"mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto\"\r\n           (click)=\"closeModal()\"\r\n           >Cancel</button>\r\n         </div>\r\n"
                 }
             ],
             "date": 1734029472859,

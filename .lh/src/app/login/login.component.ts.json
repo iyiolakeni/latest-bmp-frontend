@@ -1,0 +1,30 @@
+{
+    "sourceFile": "src/app/login/login.component.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1734166895225,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1734166990673,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -52,8 +52,12 @@\n             }else{\r\n               this.submit = false;\r\n \r\n             }\r\n+          },\r\n+          (error)=>{\r\n+            this.submit = false;\r\n+            this.apiResponse = error.error.message;\r\n           }\r\n         )\r\n       )\r\n     }\r\n"
+                },
+                {
+                    "date": 1734167055970,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -55,9 +55,9 @@\n             }\r\n           },\r\n           (error)=>{\r\n             this.submit = false;\r\n-            this.apiResponse = error.error.message;\r\n+            this.apiResponse = error.message;\r\n           }\r\n         )\r\n       )\r\n     }\r\n"
+                },
+                {
+                    "date": 1734167848196,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -50,9 +50,9 @@\n               this.router.navigate(['dashboard']);\r\n               this.submit = false;\r\n             }else{\r\n               this.submit = false;\r\n-\r\n+              this.apiResponse = response.message;\r\n             }\r\n           },\r\n           (error)=>{\r\n             this.submit = false;\r\n"
+                }
+            ],
+            "date": 1734166895225,
+            "name": "Commit-0",
+            "content": "import { Component } from '@angular/core';\r\nimport { FormBuilder, FormGroup, Validators } from '@angular/forms';\r\nimport { Router } from '@angular/router';\r\nimport { LoginService } from '../services/login/login.service';\r\nimport { Subscription } from 'rxjs';\r\nimport { SharedServiceService } from '../services/shared-service/shared-service.service';\r\nimport { UserData } from '../interface/books.model';\r\n\r\n@Component({\r\n  selector: 'app-login',\r\n  templateUrl: './login.component.html',\r\n  styleUrl: './login.component.scss'\r\n})\r\nexport class LoginComponent {\r\n\r\n  showPassword: boolean = false;\r\n  loginForm: FormGroup = new FormGroup({});\r\n  private subscriptions: Subscription[] = [];\r\n  submit: boolean = false;\r\n  apiResponse: string = '';\r\n\r\n  constructor(\r\n    private router: Router,\r\n    private fb: FormBuilder,\r\n    private loginService: LoginService,\r\n    private sharedService: SharedServiceService\r\n  ){\r\n    this.loginForm = this.fb.group({\r\n      usernameOrEmail: ['', Validators.required],\r\n      password: ['', Validators.required]\r\n    })\r\n  }\r\n\r\n  signUp():void{\r\n    this.router.navigate(['signup']);\r\n  }\r\n\r\n  togglePassword(): void{\r\n    this.showPassword = !this.showPassword;\r\n  }\r\n\r\n  login(): void{\r\n    this.submit = true;\r\n    if(this.loginForm.valid){\r\n      this.subscriptions.push(\r\n        this.loginService.login(this.loginForm.value).subscribe(\r\n          (response: UserData) => {\r\n            if(response.message === 'success'){\r\n              this.sharedService.setUser(response.user);\r\n              this.router.navigate(['dashboard']);\r\n              this.submit = false;\r\n            }else{\r\n              this.submit = false;\r\n\r\n            }\r\n          }\r\n        )\r\n      )\r\n    }\r\n    \r\n  }\r\n}\r\n"
+        }
+    ]
+}

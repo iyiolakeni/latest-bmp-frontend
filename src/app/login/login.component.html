@@ -30,15 +30,19 @@
           <span *ngIf="!submit">
             Login
           </span>
-            <div *ngIf="submit" class="flex items-center justify-center bg-gray-100 rounded-lg shadow-md">
-                <span class="mr-2 text-lg font-semibold text-blue-600">Signing in</span>
+            <div *ngIf="submit" class="flex items-center justify-center">
+                <span class="mr-2 text-lg font-semibold text-white">Signing in</span>
                 <div class="flex space-x-1">
-                  <div class="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
-                  <div class="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style="animation-delay: -0.6s;"></div>
-                  <div class="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style="animation-delay: -0.3s;"></div>
+                  <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+                  <div class="w-2 h-2 bg-white rounded-full animate-bounce" style="animation-delay: -0.6s;"></div>
+                  <div class="w-2 h-2 bg-white rounded-full animate-bounce" style="animation-delay: -0.3s;"></div>
                 </div>
               </div>
         </button>
+        <!-- <div class="flex justify-end mt-4">
+          <a class="text-blue-500 ">Forgot Password?</a>
+        </div> -->
+        <div class="text-red-500 text-sm mt-2" *ngIf="apiResponse !== ''">{{apiResponse}}</div>
       </form>
   
       <div class="flex justify-center mt-4">

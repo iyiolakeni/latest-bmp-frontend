@@ -22,7 +22,7 @@ export class FormComponent {
   cardType:any
   businessCategory:any
   private subscriptions: Subscription[] = []
-
+  isLoading: boolean = false;
   
   tabs = [
     { label: 'REQUEST DETAILS' },
@@ -51,6 +51,7 @@ export class FormComponent {
       noOfPos: [0, Validators.required],
       notes: ['', Validators.required],
       requestId: [''],
+      requestID: [''],
       status: [''],
       supportingDocument: [''],
       terminalLocation: [[], Validators.required],
@@ -76,6 +77,7 @@ export class FormComponent {
       noOfPos: this.data.request.noOfPos,
       notes: this.data.request.notes,
       requestId: this.data.request.requestId,
+      requestID: this.data.request.requestID,
       status: this.data.request.status,
       supportingDocument: this.data.request.supportingDocument,
       terminalLocation: this.data.request.terminalLocation,
@@ -128,6 +130,7 @@ export class FormComponent {
 
   onSubmit() {
     // console.log(this.formGroup.value);
+    this.isLoading = true;
     const payload = {
         noOfPos: this.formGroup.value?.noOfPos,
         terminalLocation: this.formGroup.value?.terminalLocation,
@@ -147,8 +150,10 @@ export class FormComponent {
         (response: any) => {
           console.log('Request updated:', response);
           this.dialogRef.close(response);
+          this.isLoading = false;
         },
         (error) => {
+          this.isLoading = false;
           console.error('Error updating request:', error);
         }
       )
