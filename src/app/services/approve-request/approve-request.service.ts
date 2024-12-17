@@ -15,12 +15,14 @@ export class ApproveRequestService {
   ) { }
 
   getAll(
+    branchId: string = '',
     page: number = 1,
     limit: number = 10,
     sortBy: string = 'createdAt',
     sortDirection: string = 'desc'
   ): Observable<any>{
     let params = new HttpParams()
+    .set('branchId', branchId)
     .set('page', page)
     .set('limit', limit)
     .set('sortBy', sortBy)
@@ -45,24 +47,30 @@ export class ApproveRequestService {
       )
   }
 
-  getApprovedRequest(): Observable<any>{
-    return this.http.get(`${APPROVE_REQUEST}/get-all-approved-request`).pipe(
+  getApprovedRequest(branchId: string): Observable<any>{
+    let params = new HttpParams()
+    .set('branchId', branchId);
+    return this.http.get(`${APPROVE_REQUEST}/get-all-approved-request/${branchId}`, {params}).pipe(
       catchError(
         this.errorHandler.errorHandler
       )
     )
   }
 
-  getPendinRequest(): Observable<any>{
-    return this.http.get(`${APPROVE_REQUEST}/get-all-pending-request`).pipe(
+  getPendinRequest(branchId: string): Observable<any>{
+    let params = new HttpParams()
+    .set('branchId', branchId);
+    return this.http.get(`${APPROVE_REQUEST}/get-all-pending-request/${branchId}`, {params}).pipe(
       catchError(
         this.errorHandler.errorHandler
       )
     )
   }
 
-  getRejectedRequest(): Observable<any>{
-    return this.http.get(`${APPROVE_REQUEST}/get-all-rejected-request`).pipe(
+  getRejectedRequest(branchId: string): Observable<any>{
+    let params = new HttpParams()
+    .set('branchId', branchId);
+    return this.http.get(`${APPROVE_REQUEST}/get-all-rejected-request/${branchId}`, {params}).pipe(
        catchError(this.errorHandler.errorHandler)
     )
   }

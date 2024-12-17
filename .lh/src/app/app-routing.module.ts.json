@@ -1,0 +1,22 @@
+{
+    "sourceFile": "src/app/app-routing.module.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1734373332892,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1734374770398,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n   {\r\n     path: 'all-request', component: AllRequestComponent\r\n   },\r\n   {\r\n-    path: 'forget-email',\r\n+    path: 'forget-password',\r\n     component: ForgetEmailComponent\r\n   }\r\n ];\r\n \r\n"
+                }
+            ],
+            "date": 1734373332892,
+            "name": "Commit-0",
+            "content": "import { NgModule } from '@angular/core';\r\nimport { RouterModule, Routes } from '@angular/router';\r\nimport { LoginComponent } from './login/login.component';\r\nimport { SignUpComponent } from './sign-up/sign-up.component';\r\nimport { DashboardComponent } from './pages/dashboard/dashboard.component';\r\nimport { AllRequestComponent } from './pages/all-request/all-request.component';\r\nimport { ForgetEmailComponent } from './forget-email/forget-email.component';\r\n\r\nconst routes: Routes = [\r\n  { path: '', redirectTo: '/login', pathMatch: 'full' },\r\n  { path: 'login', component: LoginComponent },\r\n  { path: 'signup', component: SignUpComponent },\r\n  {path: 'dashboard', component: DashboardComponent},\r\n  {\r\n    path: 'all-request', component: AllRequestComponent\r\n  },\r\n  {\r\n    path: 'forget-email',\r\n    component: ForgetEmailComponent\r\n  }\r\n];\r\n\r\n@NgModule({\r\n  imports: [RouterModule.forRoot(routes)],\r\n  exports: [RouterModule]\r\n})\r\nexport class AppRoutingModule { }\r\n"
+        }
+    ]
+}

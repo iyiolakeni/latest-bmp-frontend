@@ -13,3 +13,4 @@ export const PTSP = environment.apiUrl + "ptsp";
 export const PROCESSOR = environment.apiUrl + "processor";
 export const ACCOUNTS = environment.apiUrl + "accounts";
 export const MODEL = environment.apiUrl + "model";
+export const BRANCH = environment.apiUrl + "branch";

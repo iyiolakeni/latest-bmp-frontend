@@ -43,6 +43,7 @@ export interface UserResponse{
     isActive: boolean;
     created_at: Date;
     updated_at: Date;
+    branchId: string;
 }
 
 export interface ApiResponse<T> {

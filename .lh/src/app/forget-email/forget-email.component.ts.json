@@ -1,0 +1,30 @@
+{
+    "sourceFile": "src/app/forget-email/forget-email.component.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1734373332873,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1734375977481,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,8 @@\n import { Component } from '@angular/core';\r\n-import { FormGroup } from '@angular/forms';\r\n+import { FormBuilder, FormGroup, Validators } from '@angular/forms';\r\n+import { LoginService } from '../services/login/login.service';\r\n+import { Subscription } from 'rxjs';\r\n \r\n @Component({\r\n   selector: 'app-forget-email',\r\n   templateUrl: './forget-email.component.html',\r\n@@ -9,5 +11,39 @@\n export class ForgetEmailComponent {\r\n submit: boolean = false;\r\n apiResponse: string = '';\r\n resetPassword: FormGroup = new FormGroup({});\r\n+private subscriptions: Subscription[] = [];\r\n+success: boolean = false;\r\n+\r\n+constructor(\r\n+  private authService: LoginService,\r\n+  private fb: FormBuilder\r\n+){\r\n+  this.resetPassword = this.fb.group({\r\n+    email: ['', Validators.required]\r\n+  })\r\n }\r\n+\r\n+reset(): void {\r\n+this.submit = true\r\n+this.subscriptions.push(\r\n+  this.authService.forgetPassword(this.resetPassword.value).subscribe(\r\n+    (response: any) => {\r\n+      if(response.success){\r\n+        this.apiResponse = response.message;\r\n+        this.submit = false;\r\n+        this.success = true;\r\n+      } else {\r\n+        this.submit = false;\r\n+        this.apiResponse = response.message;\r\n+      }\r\n+    }, \r\n+    (error) => {\r\n+      this.submit = false;\r\n+      this.apiResponse = error.message;\r\n+    }\r\n+  )\r\n+)\r\n+\r\n+}\r\n+}\r\n"
+                },
+                {
+                    "date": 1734376717928,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,9 @@\n import { Component } from '@angular/core';\r\n import { FormBuilder, FormGroup, Validators } from '@angular/forms';\r\n import { LoginService } from '../services/login/login.service';\r\n import { Subscription } from 'rxjs';\r\n+import { ApiResponse } from '../interface/books.model';\r\n \r\n @Component({\r\n   selector: 'app-forget-email',\r\n   templateUrl: './forget-email.component.html',\r\n@@ -27,16 +28,16 @@\n reset(): void {\r\n this.submit = true\r\n this.subscriptions.push(\r\n   this.authService.forgetPassword(this.resetPassword.value).subscribe(\r\n-    (response: any) => {\r\n-      if(response.success){\r\n-        this.apiResponse = response.message;\r\n+    (response: ApiResponse<any>) => {\r\n+      if(response.data.success){\r\n+        this.apiResponse = response.data.message;\r\n         this.submit = false;\r\n         this.success = true;\r\n       } else {\r\n         this.submit = false;\r\n-        this.apiResponse = response.message;\r\n+        this.apiResponse = response.data.message;\r\n       }\r\n     }, \r\n     (error) => {\r\n       this.submit = false;\r\n"
+                },
+                {
+                    "date": 1734376809655,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,8 +26,9 @@\n }\r\n \r\n reset(): void {\r\n this.submit = true\r\n+this.apiResponse = ''\r\n this.subscriptions.push(\r\n   this.authService.forgetPassword(this.resetPassword.value).subscribe(\r\n     (response: ApiResponse<any>) => {\r\n       if(response.data.success){\r\n"
+                }
+            ],
+            "date": 1734373332873,
+            "name": "Commit-0",
+            "content": "import { Component } from '@angular/core';\r\nimport { FormGroup } from '@angular/forms';\r\n\r\n@Component({\r\n  selector: 'app-forget-email',\r\n  templateUrl: './forget-email.component.html',\r\n  styleUrl: './forget-email.component.scss'\r\n})\r\nexport class ForgetEmailComponent {\r\nsubmit: boolean = false;\r\napiResponse: string = '';\r\nresetPassword: FormGroup = new FormGroup({});\r\n}\r\n"
+        }
+    ]
+}

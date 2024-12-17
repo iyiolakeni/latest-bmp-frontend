@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { User } from '../../interface/books.model';
@@ -21,6 +21,20 @@ export class SignUpService {
 
   get(): Observable<any>{
     return this.http.get<any>(`${USERS}/get-all`).pipe(
+      catchError(this.errorHandler)
+    )
+  }
+
+  getArchivedUsers(): Observable<any>{
+    return this.http.get<any>(`${USERS}/get-archived-users`).pipe(
+      catchError(this.errorHandler)
+    )
+  }
+
+  getAllPosOfficers(branchId: string): Observable<any>{
+    let params = new HttpParams()
+    .set('branchId', branchId);
+    return this.http.get<any>(`${USERS}/get-pos-officers-by-branch/${branchId}`, {params}).pipe(
       catchError(this.errorHandler)
     )
   }

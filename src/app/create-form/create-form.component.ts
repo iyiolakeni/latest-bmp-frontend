@@ -106,6 +106,7 @@ export class CreateFormComponent {
       const payload ={
         ...this.formGroup.value,
         userId: this.user.id,
+        branchId: this.user.branchId,
       } 
       this.subscriptions.push(
         this.service.create(payload).subscribe((response: ApiResponse<any>) => {

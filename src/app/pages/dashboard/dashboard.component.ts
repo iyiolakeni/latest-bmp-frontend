@@ -7,6 +7,8 @@ import { finalize, forkJoin, Observable, Subscription } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { ApproveRequestService } from '../../services/approve-request/approve-request.service';
 import { DeployedTableService } from '../../services/deployed-table/deployed-table.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateFormComponent } from '../../create-form/create-form.component';
 
 interface StatusCard {
   title: string;
@@ -143,7 +145,8 @@ export class DashboardComponent {
     private sharedService: SharedServiceService,
     private approvalService: ApproveRequestService,
     private deployService: DeployedTableService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog
   ){
     Chart.register(...registerables);
   }
@@ -164,6 +167,7 @@ export class DashboardComponent {
   ngOnDestroy(): void {
     // Ensure chart is destroyed when component is destroyed
     this.destroyChart();
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   private initializeChart(): void {
@@ -214,16 +218,21 @@ export class DashboardComponent {
       };
     } else if (this.user.jobPosition === 'Business Developer') {
       observables = {
-        pending: this.approvalService.getPendinRequest(),
-        approved: this.approvalService.getApprovedRequest(),
-        rejected: this.approvalService.getRejectedRequest()
+        pending: this.approvalService.getPendinRequest(this.user.branchId),
+        approved: this.approvalService.getApprovedRequest(this.user.branchId),
+        rejected: this.approvalService.getRejectedRequest(this.user.branchId)
       };
     } else if (this.user.jobPosition === 'POS Business Officer') {
       observables = {
-        pending: this.deployService.getPendinRequest(),
-        deployed: this.deployService.getDeployedRequest(),
-        delivered: this.deployService.getDeliveredRequest()
+        pending: this.deployService.getPendinRequest(this.user.branchId),
+        deployed: this.deployService.getDeployedRequest(this.user.branchId),
+        delivered: this.deployService.getDeliveredRequest(this.user.branchId)
       };
+    }else if (this.user.jobPosition === 'Pos Officer') {
+      observables = {
+        pending: this.deployService.getDeployedRequestAssignedTo(this.user.id),
+        delivered: this.deployService.getDeliveredRequestBy(this.user.id)
+      }
     }
   
     forkJoin(observables).pipe(
@@ -467,11 +476,37 @@ updateStausCards():void{
     }
   ]
 }
+else {
+  this.statusCards = [
+    { 
+      title: 'Pending', 
+      count: this.pendingCount, 
+      iconName: 'trending_up',
+      bgColor: 'bg-amber-50', 
+      borderColor: 'border-amber-300', 
+      textColor: 'text-amber-600',
+      trend: '+12%'
+    },
+    { 
+      title: 'Delivered', 
+      count: this.deliveredCount, 
+      iconName: 'inventory_2',
+      bgColor: 'bg-indigo-50', 
+      borderColor: 'border-indigo-300', 
+      textColor: 'text-indigo-600',
+      trend: '+15%'
+    }
+  ]
+}
 }
 
 createNewRequest() {
   // Implement navigation or modal for creating a new request
-  console.log('Create New Request');
+  const dialogRef = this.dialog.open(CreateFormComponent)
+  dialogRef.afterClosed().subscribe(result => {
+    this.loadExtraData();
+  })
+  // console.log('Create New Request');
 }
 
 viewApprovals() {
@@ -488,7 +523,6 @@ trackRequests() {
     this.requestService.getProcessingTime().subscribe(
       (data: ApiResponse<number>) => {
         this.processingTime = data.data.data
-        console.log('Response ', this.processingTime)
       }
     )
   )

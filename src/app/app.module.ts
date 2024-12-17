@@ -35,7 +35,10 @@ import {
   bootstrapTrash,
   bootstrapXCircle,
   bootstrapExclamationTriangle,
-  bootstrapSendCheck
+  bootstrapSendCheck,
+  bootstrapEnvelopePaper,
+  bootstrapCheck2All,
+  bootstrapSendCheckFill
 } from '@ng-icons/bootstrap-icons';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -48,6 +51,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackbarComponent } from './snackbar/snackbar.component';
 import { ModalComponent } from './modal/modal.component';
 import { DeployDialogComponent } from './deploy-dialog/deploy-dialog.component';
+import { ForgetEmailComponent } from './forget-email/forget-email.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +66,8 @@ import { DeployDialogComponent } from './deploy-dialog/deploy-dialog.component';
     CreateFormComponent,
     SnackbarComponent,
     ModalComponent,
-    DeployDialogComponent
+    DeployDialogComponent,
+    ForgetEmailComponent
   ],
   imports: [
     BrowserModule,
@@ -97,7 +102,9 @@ import { DeployDialogComponent } from './deploy-dialog/deploy-dialog.component';
       bootstrapInfoCircle,
       bootstrapXCircle,
       bootstrapExclamationTriangle,
-      bootstrapSendCheck
+      bootstrapSendCheck,
+      bootstrapEnvelopePaper,
+      bootstrapSendCheckFill
     }),
     MatIconModule,
     NgSelectModule

@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AllRequestComponent } from './pages/all-request/all-request.component';
+import { ForgetEmailComponent } from './forget-email/forget-email.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -12,6 +13,10 @@ const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent},
   {
     path: 'all-request', component: AllRequestComponent
+  },
+  {
+    path: 'forget-password',
+    component: ForgetEmailComponent
   }
 ];
 

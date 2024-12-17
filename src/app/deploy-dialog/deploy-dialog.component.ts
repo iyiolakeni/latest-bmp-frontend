@@ -9,6 +9,7 @@ import { PtspService } from '../services/ptsp/ptsp.service';
 import { ProcessorService } from '../services/processor/processor.service';
 import { AccountService } from '../services/account/account.service';
 import { DeployedTableService } from '../services/deployed-table/deployed-table.service';
+import { SignUpService } from '../services/sign-up/sign-up.service';
 @Component({
   selector: 'app-deploy-dialog',
   templateUrl: './deploy-dialog.component.html',
@@ -29,6 +30,7 @@ export class DeployDialogComponent {
   tabs = [{ label: 'DEPLOYMENT FORM' }];
   userId : string =  '';
   isLoading: boolean = false;
+  posOfficers: any;
 
   constructor(
     public dialogRef: MatDialogRef<DeployDialogComponent>,
@@ -39,6 +41,7 @@ export class DeployDialogComponent {
     private processorService: ProcessorService,
     private accountService: AccountService,
     private service: DeployedTableService,
+    private userService: SignUpService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.formGroup = this.fb.group({
@@ -47,6 +50,7 @@ export class DeployDialogComponent {
       ptspId: ['', Validators.required],
       processorId: ['', Validators.required],
       accountId: ['', Validators.required],
+      assignedTo: ['', Validators.required],
     });
   }
 
@@ -73,6 +77,7 @@ export class DeployDialogComponent {
     this.ptspList();
     this.processorList();
     this.accountList();
+    this.posOfficerList();
   }
 
   modelList() {
@@ -84,6 +89,12 @@ export class DeployDialogComponent {
   ptspList() {
     this.subscriptions.push(this.ptspService.getAll().subscribe((response: ApiResponse<any>) => {
       this.ptsp = response.data.data;
+    }));
+  }
+
+  posOfficerList() {
+    this.subscriptions.push(this.userService.getAllPosOfficers(this.user.branchId).subscribe((response: ApiResponse<any>) => {
+      this.posOfficers = response.data.data;
     }));
   }
 

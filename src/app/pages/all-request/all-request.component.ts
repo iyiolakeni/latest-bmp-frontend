@@ -27,7 +27,10 @@ totalItems = 0;
 isView: boolean = false;
 data: any = {};
 rejectForm: FormGroup = new FormGroup({});
+deployForm: FormGroup = new FormGroup({});
 isLoading: boolean = false;
+isLoading2: boolean = false;
+showDeploy: boolean = false;
 
 readonly STATUS_COLORS: { [key: string]: string } = {
   'pending': 'bg-yellow-100 text-yellow-800',
@@ -59,6 +62,9 @@ constructor(
     notes: [''],
     approvedNoOfPos: ['']
   })
+  this.deployForm = this.fb.group({
+    deliveryNotes: ['']
+  })
 }
 
 ngOnInit(){
@@ -68,8 +74,10 @@ ngOnInit(){
     this.getAllRequests();
   }else if(this.user.jobPosition === 'Business Developer'){
     this.getApprovedRequest();
-  }else{
-    this.getDeployedRequest();
+  }else if (this.user.jobPosition === 'POS Business Officer'){
+    this.getDeployedRequest()
+  }else {
+    this.getAllRequestByAssignedTo();
   }
 }
 
@@ -79,6 +87,7 @@ getAllRequests(
   this.error = '';
   this.subscriptions.push(
     this.requestService.getAll(
+      this.user.branchId,
       this.currentPage,
       this.itemsPerPage,
       this.sortBy = 'createdAt',
@@ -104,7 +113,36 @@ getAllRequests(
 getDeployedRequest(){
   this.loading = true;
   this.subscriptions.push(
-    this.deployService.getAll( this.currentPage,
+    this.deployService.getAll( 
+      this.user.branchId,
+      this.currentPage,
+      this.itemsPerPage,
+      this.sortBy = 'requestDate',
+      this.sortDirection
+    ).pipe(
+      takeUntil(this.destroy$),
+      finalize(() => this.loading = false)
+    ).subscribe({
+      next: (response: ApiResponse<[]>) => {
+        this.allRequests = response.data.data;
+        this.totalItems = response.data.data.length;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.error = error.message;
+        this.loading = false
+      }
+})
+  )
+}
+
+getAllRequestByAssignedTo(){
+  this.loading = true;
+  this.subscriptions.push(
+    this.deployService.getAllRequestByAssignedTo( 
+      this.user.id,
+      this.currentPage,
       this.itemsPerPage,
       this.sortBy = 'requestDate',
       this.sortDirection
@@ -129,7 +167,9 @@ getDeployedRequest(){
 getApprovedRequest(){
   this.loading = true;
   this.subscriptions.push(
-    this.approveService.getAll( this.currentPage,
+    this.approveService.getAll( 
+      this.user.branchId,
+      this.currentPage,
       this.itemsPerPage,
       this.sortBy = 'requestDate',
       this.sortDirection
@@ -263,6 +303,11 @@ openModal(request: any): void {
   this.data = request;
 }
 
+openModal2(request: any): void {
+  this.showDeploy = true;
+  this.data = request;
+}
+
 approveModal(request: any): void {
   this.showDialog = true;
   this.accept = true;
@@ -274,6 +319,10 @@ approveModal(request: any): void {
 
 closeModal(): void {
   this.showDialog = false;
+}
+
+closeModal2(): void {
+  this.showDeploy = false;
 }
 
 disapproveRequest(): void {
@@ -326,6 +375,39 @@ this.subscriptions.push(
     }
   )
 )
+}
+
+deployRequest(): void {
+  this.isLoading2 = true;
+
+  const payload = {
+    status: 'delivered',
+    deliveredBy: this.user.id,
+    deliveryNotes: this.rejectForm.value.notes,
+  }
+this.subscriptions.push(
+  this.deployService.deliverRequest(this.data.id, payload).subscribe(
+    (response) => {
+      this.getAllRequestByAssignedTo();
+      this.data = {};
+      this.showDeploy = false;
+  this.isLoading2 = false;
+
+    },
+    (error) => {
+      console.log(error);
+  this.isLoading2 = false;
+
+    }
+  )
+)
+}
+
+checkStatus(status: string): string {
+  if (status === 'deployed') {
+    return 'Pending';
+  }
+  return status;
 }
 
 

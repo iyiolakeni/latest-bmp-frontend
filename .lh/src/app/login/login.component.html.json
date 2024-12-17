@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 2,
+            "activePatchIndex": 13,
             "patches": [
                 {
                     "date": 1734028616799,
@@ -16,6 +16,50 @@
                 {
                     "date": 1734166929890,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,9 +30,9 @@\n           <span *ngIf=\"!submit\">\r\n             Login\r\n           </span>\r\n             <div *ngIf=\"submit\" class=\"flex items-center justify-center\">\r\n-                <span class=\"mr-2 text-lg font-semibold text-blue-600\">Signing in</span>\r\n+                <span class=\"mr-2 text-lg font-semibold text-white\">Signing in</span>\r\n                 <div class=\"flex space-x-1\">\r\n                   <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\"></div>\r\n                   <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\" style=\"animation-delay: -0.6s;\"></div>\r\n                   <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\" style=\"animation-delay: -0.3s;\"></div>\r\n"
+                },
+                {
+                    "date": 1734372704094,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -38,15 +38,15 @@\n                   <div class=\"w-2 h-2 bg-white rounded-full animate-bounce\" style=\"animation-delay: -0.3s;\"></div>\r\n                 </div>\r\n               </div>\r\n         </button>\r\n-        <!-- <div class=\"flex justify-end mt-4\">\r\n-          <a class=\"text-blue-500 \">Forgot Password?</a>\r\n-        </div> -->\r\n-        <div class=\"text-red-500 text-sm mt-2\" *ngIf=\"apiResponse !== ''\">{{apiResponse}}</div>\r\n-      </form>\r\n-  \r\n-      <div class=\"flex justify-center mt-4\">\r\n+        <!-- <div class=\"flex justify-end mt-4\"> -->\r\n+          <!-- </div> -->\r\n+          <div class=\"text-red-500 text-sm mt-2\" *ngIf=\"apiResponse !== ''\">{{apiResponse}}</div>\r\n+        </form>\r\n+        \r\n+        <div class=\"flex mt-4 gap-4\">\r\n+        <a class=\"text-blue-500 \">Forgot Password?</a>\r\n         <a class=\"text-blue-500 \">Don't have an account? <span class=\"cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</span></a>\r\n       </div>\r\n     </div>\r\n   </div>\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1734372745957,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -44,9 +44,9 @@\n           <div class=\"text-red-500 text-sm mt-2\" *ngIf=\"apiResponse !== ''\">{{apiResponse}}</div>\r\n         </form>\r\n         \r\n         <div class=\"flex mt-4 gap-4\">\r\n-        <a class=\"text-blue-500 \">Forgot Password?</a>\r\n-        <a class=\"text-blue-500 \">Don't have an account? <span class=\"cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</span></a>\r\n+          <a class=\"text-blue-500 \">Don't have an account? <span class=\"cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</span></a>\r\n+          <a class=\"text-blue-500 hover:text-red-400\">Forgot Password?</a>\r\n       </div>\r\n     </div>\r\n   </div>\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1734372867513,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,8 +45,8 @@\n         </form>\r\n         \r\n         <div class=\"flex mt-4 gap-4\">\r\n           <a class=\"text-blue-500 \">Don't have an account? <span class=\"cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</span></a>\r\n-          <a class=\"text-blue-500 hover:text-red-400\">Forgot Password?</a>\r\n+          <a class=\"text-blue-500 hover:text-red-400 cursor-pointer\">Forgot Password?</a>\r\n       </div>\r\n     </div>\r\n   </div>\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1734372903155,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -44,9 +44,9 @@\n           <div class=\"text-red-500 text-sm mt-2\" *ngIf=\"apiResponse !== ''\">{{apiResponse}}</div>\r\n         </form>\r\n         \r\n         <div class=\"flex mt-4 gap-4\">\r\n-          <a class=\"text-blue-500 \">Don't have an account? <span class=\"cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</span></a>\r\n+          <a class=\"text-blue-500 space-x-1\">Don't have an account? <span class=\"cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</span></a>\r\n           <a class=\"text-blue-500 hover:text-red-400 cursor-pointer\">Forgot Password?</a>\r\n       </div>\r\n     </div>\r\n   </div>\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1734372958101,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -44,9 +44,12 @@\n           <div class=\"text-red-500 text-sm mt-2\" *ngIf=\"apiResponse !== ''\">{{apiResponse}}</div>\r\n         </form>\r\n         \r\n         <div class=\"flex mt-4 gap-4\">\r\n-          <a class=\"text-blue-500 space-x-1\">Don't have an account? <span class=\"cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</span></a>\r\n+            <div class=\"text-center w-full\">\r\n+            <a class=\"text-blue-500 space-x-1\">Don't have an account?</a>\r\n+            <a class=\"text-blue-500 cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</a>\r\n+            </div>\r\n           <a class=\"text-blue-500 hover:text-red-400 cursor-pointer\">Forgot Password?</a>\r\n       </div>\r\n     </div>\r\n   </div>\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1734372985619,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,9 +45,9 @@\n         </form>\r\n         \r\n         <div class=\"flex mt-4 gap-4\">\r\n             <div class=\"text-center w-full\">\r\n-            <a class=\"text-blue-500 space-x-1\">Don't have an account?</a>\r\n+            <a class=\"text-blue-500\">Don't have an account?</a>\r\n             <a class=\"text-blue-500 cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</a>\r\n             </div>\r\n           <a class=\"text-blue-500 hover:text-red-400 cursor-pointer\">Forgot Password?</a>\r\n       </div>\r\n"
+                },
+                {
+                    "date": 1734373000429,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -44,12 +44,9 @@\n           <div class=\"text-red-500 text-sm mt-2\" *ngIf=\"apiResponse !== ''\">{{apiResponse}}</div>\r\n         </form>\r\n         \r\n         <div class=\"flex mt-4 gap-4\">\r\n-            <div class=\"text-center w-full\">\r\n-            <a class=\"text-blue-500\">Don't have an account?</a>\r\n-            <a class=\"text-blue-500 cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</a>\r\n-            </div>\r\n+          <a class=\"text-blue-500 space-x-1\">Don't have an account? <span class=\"cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</span></a>\r\n           <a class=\"text-blue-500 hover:text-red-400 cursor-pointer\">Forgot Password?</a>\r\n       </div>\r\n     </div>\r\n   </div>\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1734373016123,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n <div class=\"flex justify-center items-center h-screen home\">\r\n     <div class=\"bg-gray-800 rounded-lg shadow-lg p-8 w-full max-w-md\">\r\n       <div class=\"text-center mb-6\">\r\n         <div class=\"flex justify-center\">\r\n-          <img src=\"/assets/logo.jpg\" alt=\"Logo\" class=\"w-10 h-10 rounded-full object-cover\">\r\n+          <img src=\"/assets/logo.jpg\" alt=\"Logo\" class=\"w-13 h-10 rounded-full object-cover\">\r\n         </div>\r\n \r\n         <h1 class=\"text-2xl font-bold text-white\">Welcome Back</h1>\r\n         <p class=\"text-gray-400 text-sm italic\">Take Control of Your POS Requests. Simplify Your Workflow.</p>\r\n"
+                },
+                {
+                    "date": 1734373027746,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n <div class=\"flex justify-center items-center h-screen home\">\r\n     <div class=\"bg-gray-800 rounded-lg shadow-lg p-8 w-full max-w-md\">\r\n       <div class=\"text-center mb-6\">\r\n         <div class=\"flex justify-center\">\r\n-          <img src=\"/assets/logo.jpg\" alt=\"Logo\" class=\"w-13 h-10 rounded-full object-cover\">\r\n+          <img src=\"/assets/logo.jpg\" alt=\"Logo\" class=\"w-10 h-10 rounded-full object-cover\">\r\n         </div>\r\n \r\n         <h1 class=\"text-2xl font-bold text-white\">Welcome Back</h1>\r\n         <p class=\"text-gray-400 text-sm italic\">Take Control of Your POS Requests. Simplify Your Workflow.</p>\r\n"
+                },
+                {
+                    "date": 1734373602385,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,8 +45,8 @@\n         </form>\r\n         \r\n         <div class=\"flex mt-4 gap-4\">\r\n           <a class=\"text-blue-500 space-x-1\">Don't have an account? <span class=\"cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</span></a>\r\n-          <a class=\"text-blue-500 hover:text-red-400 cursor-pointer\">Forgot Password?</a>\r\n+          <a class=\"text-blue-500 hover:text-red-400 cursor-pointer\" href=\"/forget-email\">Forgot Password?</a>\r\n       </div>\r\n     </div>\r\n   </div>\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1734374770464,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,8 +45,8 @@\n         </form>\r\n         \r\n         <div class=\"flex mt-4 gap-4\">\r\n           <a class=\"text-blue-500 space-x-1\">Don't have an account? <span class=\"cursor-pointer hover:text-red-400\" (click)=\"signUp()\">Sign Up</span></a>\r\n-          <a class=\"text-blue-500 hover:text-red-400 cursor-pointer\" href=\"/forget-email\">Forgot Password?</a>\r\n+          <a class=\"text-blue-500 hover:text-red-400 cursor-pointer\" href=\"/forget-password\">Forgot Password?</a>\r\n       </div>\r\n     </div>\r\n   </div>\n\\ No newline at end of file\n"
                 }
             ],
             "date": 1734028616799,

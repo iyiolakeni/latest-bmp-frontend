@@ -5,6 +5,7 @@ import { JobPositionService } from '../services/job-position/job-position.servic
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SignUpService } from '../services/sign-up/sign-up.service';
+import { BranchService } from '../services/branch/branch.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -21,12 +22,13 @@ export class SignUpComponent {
   confirmPassword: boolean = false;
   apiResponse: string = '';
   submit: boolean = false;
-
+  branch: any;
   constructor(
     private router: Router,
     private jobPositionService: JobPositionService,
     private signUpService: SignUpService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private branchService: BranchService
   ){
     this.signUpForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -39,12 +41,14 @@ export class SignUpComponent {
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       jobPositionId: ['', Validators.required],
-      confirmPassword: ['', Validators.required]
+      confirmPassword: ['', Validators.required],
+      branchId: ['', Validators.required]
     })
   }
 
   ngOnInit(){
     this.getAllJobPosition()
+    this.getAllBranch()
   }
 
   getAllJobPosition():void{
@@ -52,6 +56,16 @@ export class SignUpComponent {
       this.jobPositionService.getAll().subscribe(
         (response: JobPositionData) => {
           this.jobPosition = response.data.data
+        }
+      )
+    )
+  }
+
+  getAllBranch():void{
+    this.subscriptions.push(
+      this.branchService.getAll().subscribe(
+        (response: ApiResponse<any>) => {
+          this.branch = response.data.data
         }
       )
     )
@@ -77,6 +91,7 @@ export class SignUpComponent {
   }
 
   onSubmit(): void{
+    this.apiResponse = '';
     this.submit = true
     if (this.signUpForm.valid){
       const payload = {
@@ -89,7 +104,11 @@ export class SignUpComponent {
         this.signUpService.create(payload).subscribe({
           next: (response: JobPositionData) =>{
             this.submit = false
-            this.router.navigate(['login'])
+            if(response.data.success){
+              this.router.navigate(['login'])
+            }else{
+              this.apiResponse = response.data.message
+            }
           },
           error: (error: ApiResponse<any>) =>{
             this.apiResponse = error.data.message

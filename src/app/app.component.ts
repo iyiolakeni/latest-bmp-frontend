@@ -17,7 +17,7 @@ export class AppComponent {
   ){
     this.router.events.subscribe((event) => {
       if(event instanceof NavigationEnd){
-        this.showSidebar = !['/login', '/signup', '/'].includes(event.urlAfterRedirects);
+        this.showSidebar = !['/login', '/signup', '/', '/forget-password'].includes(event.urlAfterRedirects);
       }
     })
   }

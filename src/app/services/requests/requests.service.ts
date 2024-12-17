@@ -27,12 +27,14 @@ export class RequestsService {
   }
 
   getAll(
+    branchId: string = '',
     page: number = 1,
     limit: number = 10,
     sortBy: string = 'createdAt',
     sortDirection: string = 'desc'
   ): Observable<any>{
     let params = new HttpParams()
+    .set('branchId', branchId)
     .set('page', page)
     .set('limit', limit)
     .set('sortBy', sortBy)

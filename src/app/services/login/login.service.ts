@@ -20,13 +20,13 @@ export class LoginService {
   }
 
   forgetPassword(email: string): Observable<any>{
-    return this.http.post<any>(`${AUTH}/forget-password`,{email}).pipe(
+    return this.http.post<any>(`${AUTH}/forget-password`,email).pipe(
       catchError(this.errorHandler)
     )
   }
 
   resetPassword(password: string, token: string): Observable<any>{
-    return this.http.post<any>(`${AUTH}/reset-password/${token}`,{password}).pipe(
+    return this.http.post<any>(`${AUTH}/reset-password/${token}`,password).pipe(
       catchError(this.errorHandler)
     )
   }

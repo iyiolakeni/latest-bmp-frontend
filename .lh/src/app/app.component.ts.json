@@ -1,0 +1,22 @@
+{
+    "sourceFile": "src/app/app.component.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1734373646635,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1734374770432,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n     private router: Router\r\n   ){\r\n     this.router.events.subscribe((event) => {\r\n       if(event instanceof NavigationEnd){\r\n-        this.showSidebar = !['/login', '/signup', '/', '/forget-email'].includes(event.urlAfterRedirects);\r\n+        this.showSidebar = !['/login', '/signup', '/', '/forget-password'].includes(event.urlAfterRedirects);\r\n       }\r\n     })\r\n   }\r\n \r\n"
+                }
+            ],
+            "date": 1734373646635,
+            "name": "Commit-0",
+            "content": "import { Component, Input } from '@angular/core';\r\nimport { NavigationEnd, Router } from '@angular/router';\r\n\r\n@Component({\r\n  selector: 'app-root',\r\n  templateUrl: './app.component.html',\r\n  styleUrl: './app.component.scss'\r\n})\r\nexport class AppComponent {\r\n  title = 'bmp-frontend';\r\n  showSidebar: boolean = true;\r\n  @Input() size: string = 'w-64';\r\n\r\n\r\n  constructor (\r\n    private router: Router\r\n  ){\r\n    this.router.events.subscribe((event) => {\r\n      if(event instanceof NavigationEnd){\r\n        this.showSidebar = !['/login', '/signup', '/', '/forget-email'].includes(event.urlAfterRedirects);\r\n      }\r\n    })\r\n  }\r\n\r\n  changeSize(){\r\n    this.size = this.size === 'w-64' ? 'w-16' : 'w-64';\r\n  }\r\n}\r\n"
+        }
+    ]
+}

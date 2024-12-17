@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/app/services/login/login.service.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1734376118363,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1734376118363,
+            "name": "Commit-0",
+            "content": "import { HttpClient, HttpErrorResponse } from '@angular/common/http';\r\nimport { Injectable } from '@angular/core';\r\nimport { catchError, Observable, throwError } from 'rxjs';\r\nimport { User } from '../../interface/books.model';\r\nimport { AUTH } from '../../constants/url.constants';\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\nexport class LoginService {\r\n\r\n  constructor(\r\n    private http: HttpClient\r\n  ) { }\r\n\r\n  login(formData: User): Observable<any>{\r\n    return this.http.post<any>(`${AUTH}/login`,formData).pipe(\r\n      catchError(this.errorHandler)\r\n    )\r\n  }\r\n\r\n  forgetPassword(email: string): Observable<any>{\r\n    return this.http.post<any>(`${AUTH}/forget-password`,email).pipe(\r\n      catchError(this.errorHandler)\r\n    )\r\n  }\r\n\r\n  resetPassword(password: string, token: string): Observable<any>{\r\n    return this.http.post<any>(`${AUTH}/reset-password/${token}`,password).pipe(\r\n      catchError(this.errorHandler)\r\n    )\r\n  }\r\n\r\n  private errorHandler(error: HttpErrorResponse) {\r\n    let errorMessage: string;\r\n  \r\n    if (error.error instanceof ErrorEvent) {\r\n      // Client-side or network error\r\n      errorMessage = `Client-side error: ${error.error.message}`;\r\n    } else if (error.status === 0) {\r\n      // Network error (ERR_INTERNET_DISCONNECTED falls here)\r\n      errorMessage = `Network error - please check your internet connection`;\r\n    } else {\r\n      // Server-side error\r\n      errorMessage = `Server returned code: ${error.status}, error message is: ${error.message}`;\r\n    }\r\n  \r\n    // Log the full error object for debugging\r\n    console.error('Full error object:', error);\r\n    console.error('Error message:', errorMessage);\r\n  \r\n    // Return a user-friendly error message\r\n    return throwError(() => new Error('Unable to complete the request. Please try again later.'));\r\n  }\r\n}\r\n"
+        }
+    ]
+}

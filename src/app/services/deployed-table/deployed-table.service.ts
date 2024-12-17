@@ -15,12 +15,14 @@ export class DeployedTableService {
   ) { }
 
   getAll(
+    branchId: string = '',
     page: number = 1,
     limit: number = 10,
     sortBy: string = 'createdAt',
     sortDirection: string = 'desc'
   ): Observable<any>{
     let params = new HttpParams()
+    .set('branchId', branchId)
     .set('page', page)
     .set('limit', limit)
     .set('sortBy', sortBy)
@@ -30,24 +32,66 @@ export class DeployedTableService {
     )
   }
 
-  getDeployedRequest(): Observable<any>{
-    return this.http.get(`${DEPLOYED_TABLE}/get-all-deployed-request`).pipe(
+  getAllRequestByAssignedTo(
+    assignedTo: string = '',
+    page: number = 1,
+    limit: number = 10,
+    sortBy: string = 'createdAt',
+    sortDirection: string = 'desc'
+  ): Observable<any>{
+    let params = new HttpParams()
+    .set('assignedTo', assignedTo)
+    .set('page', page)
+    .set('limit', limit)
+    .set('sortBy', sortBy)
+    .set('sortDirection', sortDirection);
+    return this.http.get(`${DEPLOYED_TABLE}/get-all-request-by-assigned-to`, {params}).pipe(
+      catchError(this.errorHandler.errorHandler)
+    )
+  }
+
+  getDeployedRequest(branchId: string): Observable<any>{
+    let params = new HttpParams()
+    .set('branchId', branchId);
+    return this.http.get(`${DEPLOYED_TABLE}/get-all-deployed-request/${branchId}`, {params}).pipe(
       catchError(
         this.errorHandler.errorHandler
       )
     )
   }
 
-  getPendinRequest(): Observable<any>{
-    return this.http.get(`${DEPLOYED_TABLE}/get-all-pending-request`).pipe(
+  getPendinRequest(branchId: string): Observable<any>{
+    let params = new HttpParams()
+    .set('branchId', branchId);
+    return this.http.get(`${DEPLOYED_TABLE}/get-all-pending-request/${branchId}`, {params}).pipe(
       catchError(
         this.errorHandler.errorHandler
       )
     )
   }
 
-  getDeliveredRequest(): Observable<any>{
-    return this.http.get(`${DEPLOYED_TABLE}/get-all-delivered-request`).pipe(
+  getDeliveredRequest(branchId: string): Observable<any>{
+    let params = new HttpParams()
+    .set('branchId', branchId);
+    return this.http.get(`${DEPLOYED_TABLE}/get-all-delivered-request/${branchId}`, {params}).pipe(
+       catchError(this.errorHandler.errorHandler)
+    )
+  }
+
+  getDeployedRequestAssignedTo(assignedTo: string): Observable<any>{
+    let params = new HttpParams()
+    .set('assignedTo', assignedTo);
+    return this.http.get(`${DEPLOYED_TABLE}/get-deployed-request-assigned-to/${assignedTo}`, {params}).pipe(
+      catchError(
+        this.errorHandler.errorHandler
+      )
+    )
+  }
+
+  getDeliveredRequestBy(deliveredBy: string): Observable<any>{
+    let params = new HttpParams()
+    .set('deliveredBy', deliveredBy);
+    return this.http.get(`${DEPLOYED_TABLE}/get-all-delivered-request/${deliveredBy}`, {params}).pipe(
        catchError(this.errorHandler.errorHandler)
     )
   }
